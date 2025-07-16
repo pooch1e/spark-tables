@@ -9,9 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "db:seed": "cross-env NODE_ENV=development ts-node ./app/lib/seed.ts",
+    "db:seed": "cross-env NODE_ENV=development ts-node ./app/lib/seeds/seed.ts",
     "db:push:test": "dotenv -e .env.test -- prisma db push --force-reset",
-    "db:seed:test": "dotenv -e .env.test -- cross-env NODE_ENV=test ts-node ./app/lib/seed.ts"
+    "db:seed:test": "dotenv -e .env.test -- cross-env NODE_ENV=test ts-node ./app/lib/seeds/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

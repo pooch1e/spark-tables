@@ -17,6 +17,8 @@ const createPrismaClient = () => {
         url: process.env.DATABASE_URL,
       },
     },
+    // Add logging for debugging in test environment
+    log: process.env.NODE_ENV === 'test' ? ['error', 'warn'] : [],
   });
 };
 
@@ -26,22 +28,26 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 
-// Test utility functions
+// Permission-safe test cleanup using DELETE instead of TRUNCATE
 export const cleanTestDatabase = async () => {
   if (process.env.NODE_ENV !== 'test') {
     throw new Error('cleanTestDatabase can only be used in test environment');
   }
 
-  const tablenames = await prisma.$queryRaw<Array<{ tablename: string }>>`
-    SELECT tablename FROM pg_tables WHERE schemaname='public'
-  `;
+  try {
+    // Use transaction to ensure all operations succeed or fail together
+    await prisma.$transaction(async (tx) => {
+      // Example order - adjust based on your actual schema:
+      await tx.descriptor.deleteMany({});
+      await tx.subtheme.deleteMany({});
+      await tx.theme.deleteMany({});
+      await tx.table.deleteMany({});
+    });
 
-  for (const { tablename } of tablenames) {
-    if (tablename !== '_prisma_migrations') {
-      await prisma.$executeRawUnsafe(
-        `TRUNCATE TABLE "public"."${tablename}" CASCADE;`
-      );
-    }
+    console.log('Test database cleaned successfully');
+  } catch (error) {
+    console.error('Error cleaning test database:', error);
+    throw error;
   }
 };
 
