@@ -20,8 +20,29 @@ afterAll(async () => {
 describe('testing database', () => {
   describe('testing seeds', () => {
     describe('tables table', () => {
-      test.todo('tables table exists');
-      test.todo('tables has x as pk');
+      test('check if Tables, table exists', async () => {
+        const tableName = 'Table';
+
+        const result = await prisma.$queryRaw<
+          { exists: boolean }[]
+        >`SELECT EXISTS (
+          SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = ${tableName}
+        );`;
+        expect(result[0].exists).toBe(true);
+      });
+      test('tables has an ID column of a number', async () => {
+        const tableName = 'Table'; // Adjust to your exact table name
+        const columnName = 'id';
+
+        const result = await prisma.$queryRaw<{ exists: boolean }[]>`
+      SELECT EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_schema = 'public' AND table_name = ${tableName} AND column_name = ${columnName}
+    );
+  `;
+
+        expect(result[0].exists).toBe(true);
+      });
       test.todo('tables has y as col etc..');
     });
   });
