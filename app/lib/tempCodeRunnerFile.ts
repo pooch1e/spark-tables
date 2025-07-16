@@ -1,9 +1,4 @@
-import { prisma } from './prisma.ts';
-import dotenv from 'dotenv';
-
-// Load environment variables from .env.test explicitly
-dotenv.config({ path: '.env.test' });
-
+import { PrismaClient } from '@prisma/client';
 import {
   tables,
   themes,
@@ -14,6 +9,13 @@ import {
 export const seedTestDatabase = async () => {
   //table, theme, subtheme, descriptor
   //deletion - descriptor, subtheme, theme, table
+  const prisma = new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL_TEST || process.env.DATABASE_URL,
+      },
+    },
+  });
 
   try {
     //clear db
@@ -46,10 +48,3 @@ export const seedTestDatabase = async () => {
     await prisma.$disconnect();
   }
 };
-
-seedTestDatabase()
-  .catch((error) => {
-    console.error('Seeding error:', error);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());

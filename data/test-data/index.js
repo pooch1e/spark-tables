@@ -1,6 +1,6 @@
-import { table } from './table';
-import { themes } from './theme';
-import { subthemes } from './subtheme';
-import { descriptors } from './descriptor';
+import { tables } from './table.js';
+import { themes } from './theme.js';
+import { subthemes } from './subtheme.js';
+import { descriptors } from './descriptor.js';
 
-export { table, themes, subthemes, descriptors };
+export { tables, themes, subthemes, descriptors };
