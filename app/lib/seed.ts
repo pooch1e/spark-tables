@@ -11,7 +11,7 @@ import {
   descriptors,
 } from '../../data/test-data/index.js';
 
-export const seedTestDatabase = async () => {
+export const seed = async () => {
   //table, theme, subtheme, descriptor
   //deletion - descriptor, subtheme, theme, table
 
@@ -47,7 +47,7 @@ export const seedTestDatabase = async () => {
   }
 };
 
-seedTestDatabase()
+seed()
   .catch((error) => {
     console.error('Seeding error:', error);
     process.exit(1);
