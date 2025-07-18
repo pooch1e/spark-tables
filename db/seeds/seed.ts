@@ -19,14 +19,14 @@ export const seed = async ({ topicsTestData, themeTestData }) => {
       .insert(topics)
       .values(topicsTestData)
       .returning();
-    console.log('seeded topics table', insertedTopics);
+    // console.log('seeded topics table', insertedTopics);
 
     const insertedThemes = await db
       .insert(themes)
       .values(themeTestData)
       .returning();
 
-    console.log('seeded themes table', insertedThemes);
+    // console.log('seeded themes table', insertedThemes);
   } catch (err) {
     console.log(err);
   }
