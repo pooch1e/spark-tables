@@ -1,18 +1,16 @@
 import { db, closeConnection } from '../connections.js';
 import {
-  tables,
+  tablesTestData,
   themes,
   subthemes,
   descriptors,
 } from '../../data/test-data/index.js';
+import { tables } from '../schema.ts';
 
-export const seed = async ({tables}) => {
-
-}
-
-
-
-
+export const seed = async () => {
+  const insertTables = await db.insert(tables).values(tablesTestData);
+  console.log('table created');
+};
 
 export const seed = async () => {
   //table, theme, subtheme, descriptor
