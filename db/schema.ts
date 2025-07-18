@@ -1,7 +1,7 @@
 import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const tables = pgTable('tables', {
+export const topics = pgTable('topics', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
@@ -11,7 +11,7 @@ export const themes = pgTable('themes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
-  table_id: integer('table_id').notNull(),
+  topic_id: integer('table_id').notNull(),
 });
 
 export const subthemes = pgTable('subthemes', {
@@ -28,12 +28,12 @@ export const descriptors = pgTable('descriptors', {
 });
 
 // Relations (optional but helpful for joins)
-export const tablesRelations = relations(tables, ({ many }) => ({
+export const tablesRelations = relations(topics, ({ many }) => ({
   themes: many(themes),
 }));
 
 export const themesRelations = relations(themes, ({ one, many }) => ({
-  table: one(tables, { fields: [themes.table_id], references: [tables.id] }),
+  table: one(topics, { fields: [themes.topic_id], references: [topics.id] }),
   subthemes: many(subthemes),
 }));
 

@@ -19,6 +19,7 @@ const connectionString = getDatabaseUrl();
 
 // Create the connection
 const client = postgres(connectionString);
+console.log('Using DB connection string:', connectionString);
 
 // Create the database instance
 export const db = drizzle(client, { schema });
