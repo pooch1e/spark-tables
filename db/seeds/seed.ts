@@ -1,12 +1,23 @@
 import { db } from '../connections.ts';
 import { topics, themes, subthemes, descriptors } from '../schema.ts';
-
+import {
+  Topics,
+  Themes,
+  Subthemes,
+  Descriptors,
+} from '@/app/types/test-data/index.ts';
+interface SeedData {
+  topicsTestData: Topics[];
+  themeTestData: Themes[];
+  subthemeData: Subthemes[];
+  descriptorData: Descriptors[];
+}
 export const seed = async ({
   topicsTestData,
   themeTestData,
   subthemeData,
   descriptorData,
-}) => {
+}: SeedData): Promise<void> => {
   try {
     //delete data before seeding
 

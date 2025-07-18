@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.test' });
-import { eq } from 'drizzle-orm';
+
 import { sql } from 'drizzle-orm';
 
 import { closeConnection, db } from '@/db/connections.ts';
@@ -20,6 +20,9 @@ beforeAll(async () => {
   await db.delete(themes);
   await db.delete(topics);
   await db.execute(sql`TRUNCATE TABLE topics RESTART IDENTITY CASCADE`);
+  await db.execute(sql`TRUNCATE TABLE themes RESTART IDENTITY CASCADE`);
+  await db.execute(sql`TRUNCATE TABLE subthemes RESTART IDENTITY CASCADE`);
+  await db.execute(sql`TRUNCATE TABLE descriptors RESTART IDENTITY CASCADE`);
   await seed({ topicsTestData, themeTestData, subthemeData, descriptorData });
 });
 afterAll(async () => {
