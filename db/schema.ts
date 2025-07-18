@@ -11,7 +11,7 @@ export const themes = pgTable('themes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
-  topic_id: integer('table_id').notNull(),
+  topic_id: integer('topic_id').notNull(),
 });
 
 export const subthemes = pgTable('subthemes', {

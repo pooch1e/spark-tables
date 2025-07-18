@@ -5,23 +5,25 @@ import { sql } from 'drizzle-orm';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
-import { topics, themes, subthemes } from '@/db/schema.ts';
+import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
 import {
   topics as topicsTestData,
   themes as themeTestData,
   subthemes as subthemeData,
-  descriptors as descriptorsData,
+  descriptors as descriptorData,
 } from '../data/test-data/index.ts';
 
 console.log('Connected to DB:', process.env.TEST_DATABASE_URL);
 beforeAll(async () => {
+  await db.delete(descriptors);
   await db.delete(subthemes);
   await db.delete(themes);
   await db.delete(topics);
   await db.execute(sql`TRUNCATE TABLE topics RESTART IDENTITY CASCADE`);
-  await seed({ topicsTestData, themeTestData, subthemeData });
+  await seed({ topicsTestData, themeTestData, subthemeData, descriptorData });
 });
 afterAll(async () => {
+  await db.delete(descriptors);
   await db.delete(subthemes);
   await db.delete(themes);
   await db.delete(topics);
@@ -109,7 +111,7 @@ describe('testing database', () => {
     WHERE table_name = 'themes';
   `);
       const [idCol, orderCol, table_id, nameCol] = result;
-      expect(table_id.column_name).toBe('table_id');
+      expect(table_id.column_name).toBe('topic_id');
       expect(table_id.data_type).toBe('integer');
     });
     test('theme table has an name column of text', async () => {
@@ -192,5 +194,17 @@ describe('testing database', () => {
         expect(theme).toHaveProperty('theme_id');
       });
     });
+  });
+  describe('descriptor table', () => {
+    test('descriptor table exists', async () => {
+      const allDescriptors = await db.select().from(descriptors);
+      expect(allDescriptors.length).toBeGreaterThan(0);
+    });
+    test.todo('has id of pk');
+    test.todo('has col name of text');
+    test.todo('has subtheme fk of id');
+  });
+  describe('descriptor table seeded', () => {
+    test.todo('seeded success');
   });
 });
