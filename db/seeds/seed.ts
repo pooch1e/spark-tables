@@ -7,7 +7,7 @@ import {
 } from '../../data/test-data/index.ts';
 import { topics } from '../schema.ts';
 
-export const seed = async () => {
+export const seed = async ({topicsTestData}) => {
   try {
     const insertedTopics = await db
       .insert(topics)
