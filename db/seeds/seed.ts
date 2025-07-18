@@ -13,8 +13,6 @@ export const seed = async () => {
       .insert(topics)
       .values(topicsTestData)
       .returning();
-    console.log('table created', insertedTopics);
-    return insertedTopics;
   } catch (err) {
     console.log(err);
   }
