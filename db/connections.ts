@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from './schema';
+import * as schema from './schema.ts';
 
 const getDatabaseUrl = () => {
   if (process.env.NODE_ENV === 'test') {
