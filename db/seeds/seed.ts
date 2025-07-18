@@ -5,16 +5,16 @@ import {
   subthemes,
   descriptors,
 } from '../../data/test-data/index.ts';
-import { tables } from '../schema.ts';
+import { topics } from '../schema.ts';
 
-export const seed = async (tableTestData) => {
+export const seed = async () => {
   try {
-    const insertTables = await Promise.all(
-      tableTestData.map((table) => {
-        return db.insert(tables).values(table).returning();
-      })
-    );
-    console.log('table created', insertTables);
+    const insertedTopics = await db
+      .insert(topics)
+      .values(topicsTestData)
+      .returning();
+    console.log('table created', insertedTopics);
+    return insertedTopics;
   } catch (err) {
     console.log(err);
   }
