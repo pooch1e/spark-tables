@@ -120,4 +120,16 @@ describe('testing database', () => {
       expect(nameCol.data_type).toBe('text');
     });
   });
+  describe('themes table seeded', () => {
+    test('themes table has been seeded succesfully', async () => {
+      const themesTable = await db.select().from(themes);
+      expect(themesTable).toHaveLength(4);
+      themesTable.forEach((theme) => {
+        expect(theme).toHaveProperty('id');
+        expect(theme).toHaveProperty('name');
+        expect(theme).toHaveProperty('order');
+        expect(theme).toHaveProperty('topic_id');
+      });
+    });
+  });
 });
