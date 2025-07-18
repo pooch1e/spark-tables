@@ -20,8 +20,8 @@ const runMigrations = async (databaseUrl?: string) => {
 };
 
 // Run migrations if this file is executed directly
-if (require.main === module) {
-  runMigrations().catch(console.error);
-}
+// if (require.main === module) {
+//   runMigrations().catch(console.error);
+// }
 
 export { runMigrations };

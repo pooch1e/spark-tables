@@ -1,27 +1,27 @@
 import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const tables = pgTable('Table', {
+export const tables = pgTable('tables', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
 });
 
-export const themes = pgTable('Theme', {
+export const themes = pgTable('themes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
   table_id: integer('table_id').notNull(),
 });
 
-export const subthemes = pgTable('Subtheme', {
+export const subthemes = pgTable('subthemes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
   theme_id: integer('theme_id').notNull(),
 });
 
-export const descriptors = pgTable('Descriptor', {
+export const descriptors = pgTable('descriptors', {
   id: serial('id').primaryKey(),
   text: text('text').notNull(),
   subtheme_id: integer('subtheme_id').notNull(),
