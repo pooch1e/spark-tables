@@ -1,15 +1,18 @@
-import { prisma } from './prisma.ts';
-import dotenv from 'dotenv';
-
-// Load environment variables from .env.test explicitly
-dotenv.config({ path: '.env.test' });
-
+import { db, closeConnection } from '../connections.js';
 import {
   tables,
   themes,
   subthemes,
   descriptors,
 } from '../../data/test-data/index.js';
+
+export const seed = async ({tables}) => {
+
+}
+
+
+
+
 
 export const seed = async () => {
   //table, theme, subtheme, descriptor
