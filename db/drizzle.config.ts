@@ -1,12 +1,25 @@
-import type { Config } from 'drizzle-kit';
+import 'dotenv/config';
 
-export default {
+const getDatabaseUrl = () => {
+  if (process.env.NODE_ENV === 'test') {
+    return (
+      process.env.TEST_DATABASE_URL ||
+      'postgresql://joelkram@localhost:5432/spark_test_database'
+    );
+  }
+  return (
+    process.env.DATABASE_URL ||
+    'postgresql://joelkram@localhost:5432/spark_database'
+  );
+};
+
+const config = {
   schema: './db/schema.ts',
-  out: './db/migrations',
-  driver: 'pg',
+  out: './drizzle',
+  driver: 'postgres-js',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString:
-      process.env.DATABASE_URL ||
-      'postgresql://joelkram@localhost:5432/spark_database',
+    connectionString: getDatabaseUrl(),
   },
-} satisfies Config;
+};
+export default config;
