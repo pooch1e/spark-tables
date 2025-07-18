@@ -5,10 +5,10 @@ import { sql } from 'drizzle-orm';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
-import { topics } from '@/db/schema.ts';
+import { topics, themes } from '@/db/schema.ts';
 import {
   topics as topicsTestData,
-  themes as themeData,
+  themes as themeTestData,
   subthemes as subthemeData,
   descriptors as descriptorsData,
 } from '../data/test-data/index.ts';
@@ -16,8 +16,9 @@ import {
 console.log('Connected to DB:', process.env.TEST_DATABASE_URL);
 beforeAll(async () => {
   await db.delete(topics);
+  await db.delete(themes);
   await db.execute(sql`TRUNCATE TABLE topics RESTART IDENTITY CASCADE`);
-  await seed({ topicsTestData });
+  await seed({ topicsTestData, themeTestData });
 });
 afterAll(async () => {
   await db.delete(topics);
@@ -74,10 +75,8 @@ describe('testing database', () => {
   });
   describe('theme table tests', () => {
     test('table of themes exists', async () => {
-      const theme = await db.select().from(themeData);
+      const theme = await db.select().from(themes);
       expect(theme.length).toBeGreaterThan(0);
     });
-  })
+  });
 });
-
-
