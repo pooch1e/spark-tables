@@ -1,10 +1,4 @@
 import { db, closeConnection } from '../connections.ts';
-import {
-  topics as topicsTestData,
-  themes as themeTestData,
-  subthemes as subthemeData,
-  descriptors,
-} from '../../data/test-data/index.ts';
 import { topics, themes, subthemes } from '../schema.ts';
 
 export const seed = async ({ topicsTestData, themeTestData, subthemeData }) => {
