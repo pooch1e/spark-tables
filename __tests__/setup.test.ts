@@ -78,5 +78,58 @@ describe('testing database', () => {
       const theme = await db.select().from(themes);
       expect(theme.length).toBeGreaterThan(0);
     });
+    test('theme table has a primary key of id integer', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'themes';
+  `);
+      const [idCol] = result;
+      expect(idCol.column_name).toBe('id');
+      expect(idCol.data_type).toBe('integer');
+    });
+    test('theme table has an order column of int', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'themes';
+  `);
+      console.log(result);
+      const [idCol, orderCol] = result;
+      expect(orderCol.column_name).toBe('order');
+      expect(orderCol.data_type).toBe('integer');
+    });
+    test('theme table has an name column of text', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'themes';
+  `);
+      const [idCol, orderCol, table_id, nameCol] = result;
+      expect(table_id.column_name).toBe('table_id');
+      expect(table_id.data_type).toBe('integer');
+    });
+    test('theme table has an name column of text', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'themes';
+  `);
+      const [idCol, orderCol, table_id, nameCol] = result;
+      expect(nameCol.column_name).toBe('name');
+      expect(nameCol.data_type).toBe('text');
+    });
+  });
+  describe('themes table seeded', () => {
+    test('themes table has been seeded succesfully', async () => {
+      const themesTable = await db.select().from(themes);
+      expect(themesTable).toHaveLength(4);
+      themesTable.forEach((theme) => {
+        expect(theme).toHaveProperty('id');
+        expect(theme).toHaveProperty('name');
+        expect(theme).toHaveProperty('order');
+        expect(theme).toHaveProperty('topic_id');
+      });
+    });
   });
 });
