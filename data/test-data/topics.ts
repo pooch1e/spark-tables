@@ -1,4 +1,4 @@
-export const tables = [
+export const topics = [
   {
     name: 'Wilderness',
     description:
