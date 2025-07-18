@@ -72,4 +72,12 @@ describe('testing database', () => {
       });
     });
   });
+  describe('theme table tests', () => {
+    test('table of themes exists', async () => {
+      const theme = await db.select().from(themeData);
+      expect(theme.length).toBeGreaterThan(0);
+    });
+  })
 });
+
+
