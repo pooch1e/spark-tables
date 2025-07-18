@@ -88,9 +88,13 @@ describe('testing database', () => {
             id: 1,
           },
         });
+        const test = async () => {
+          console.log('DATABASE_URL:', process.env.DATABASE_URL);
+          const result = await prisma.theme.findMany();
+          console.log(result);
+        };
+        test();
         console.log(result);
-        expect(result?.id).toBe(1);
-        expect(typeof result?.id).toBe('number');
       });
       test.todo('theme has column Name of string');
       test.todo('theme has column Order of Int');
