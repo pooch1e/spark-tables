@@ -1,8 +1,14 @@
 import { seed } from './seed';
-import { closeConnection, db } from '../connections';
+import {
+  topics,
+  themes,
+  subthemes,
+  descriptors,
+} from '../../data/development-data/index.ts';
 
-const runSeed = () => {
-  return seed(devData).then(() => closeConnection());
+const runSeed = async () => {
+  await seed({ topics, themes, subthemes, descriptors });
+  console.log('seeded DB!');
 };
 
 runSeed();
