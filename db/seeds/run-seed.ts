@@ -1,4 +1,5 @@
-import { seed } from './seed';
+import { seed } from './seed.ts';
+import { closeConnection } from '../connections.ts';
 import {
   topics,
   themes,
@@ -7,8 +8,19 @@ import {
 } from '../../data/development-data/index.ts';
 
 const runSeed = async () => {
-  await seed({ topics, themes, subthemes, descriptors });
-  console.log('seeded DB!');
+  try {
+    await seed({
+      topicsTestData: topics,
+      themeTestData: themes,
+      subthemeData: subthemes,
+      descriptorData: descriptors,
+    });
+    console.log('seeded DB!');
+  } catch (err) {
+    console.log(err, 'err in seeding db');
+  } finally {
+    await closeConnection();
+  }
 };
 
 runSeed();
