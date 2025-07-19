@@ -15,7 +15,7 @@ CREATE TABLE "themes" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"order" integer NOT NULL,
-	"table_id" integer NOT NULL
+	"topic_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "topics" (

@@ -1,10 +1,27 @@
-import { db, closeConnection } from '../connections.ts';
-import { topics, themes, subthemes } from '../schema.ts';
-
-export const seed = async ({ topicsTestData, themeTestData, subthemeData }) => {
+import { db } from '../connections.ts';
+import { topics, themes, subthemes, descriptors } from '../schema.ts';
+import {
+  Topics,
+  Themes,
+  Subthemes,
+  Descriptors,
+} from '@/app/types/test-data/index.ts';
+interface SeedData {
+  topicsTestData: Topics[];
+  themeTestData: Themes[];
+  subthemeData: Subthemes[];
+  descriptorData: Descriptors[];
+}
+export const seed = async ({
+  topicsTestData,
+  themeTestData,
+  subthemeData,
+  descriptorData,
+}: SeedData): Promise<void> => {
   try {
     //delete data before seeding
 
+    await db.delete(descriptors);
     await db.delete(subthemes);
     await db.delete(themes);
     await db.delete(topics);
@@ -28,7 +45,14 @@ export const seed = async ({ topicsTestData, themeTestData, subthemeData }) => {
       .insert(subthemes)
       .values(subthemeData)
       .returning();
-    console.log('seeded subtheme', insertedSubThemes);
+    // console.log('seeded subtheme', insertedSubThemes);
+
+    //descriptors
+    const insertedDescriptor = await db
+      .insert(descriptors)
+      .values(descriptorData)
+      .returning();
+    // console.log('inserted descriptors', insertedDescriptor);
   } catch (err) {
     console.log(err);
   }
