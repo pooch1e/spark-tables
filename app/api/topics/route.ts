@@ -3,6 +3,7 @@
 import { TopicService } from '@/app/lib/services/topicService';
 export async function GET(request: Request) {
   try {
+    
     const allTopics = await TopicService.getAllTopics();
 
     return Response.json(
