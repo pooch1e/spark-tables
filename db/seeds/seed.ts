@@ -21,6 +21,7 @@ export const seed = async ({
   try {
     //delete data before seeding
 
+    await db.delete(descriptors);
     await db.delete(subthemes);
     await db.delete(themes);
     await db.delete(topics);
@@ -51,7 +52,7 @@ export const seed = async ({
       .insert(descriptors)
       .values(descriptorData)
       .returning();
-    console.log('inserted descriptors', insertedDescriptor);
+    // console.log('inserted descriptors', insertedDescriptor);
   } catch (err) {
     console.log(err);
   }

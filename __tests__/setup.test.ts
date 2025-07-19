@@ -203,11 +203,46 @@ describe('testing database', () => {
       const allDescriptors = await db.select().from(descriptors);
       expect(allDescriptors.length).toBeGreaterThan(0);
     });
-    test.todo('has id of pk');
-    test.todo('has col name of text');
-    test.todo('has subtheme fk of id');
+    test('descriptor has id of pk', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'descriptors';
+  `);
+      const [idCol] = result;
+      expect(idCol.column_name).toBe('id');
+      expect(idCol.data_type).toBe('integer');
+    });
+    test('descriptor has col name of subtheme', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'descriptors';
+  `);
+      const [idCol, subtheme] = result;
+      expect(subtheme.column_name).toBe('subtheme_id');
+      expect(subtheme.data_type).toBe('integer');
+    });
+    test('has subtheme fk of id', async () => {
+      const result = await db.execute(sql`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = 'descriptors';
+  `);
+      const [idCol, subtheme, text] = result;
+      expect(text.column_name).toBe('text');
+      expect(text.data_type).toBe('text');
+    });
   });
   describe('descriptor table seeded', () => {
-    test.todo('seeded success');
+    test('seeded success', async () => {
+      const descriptions = await db.select().from(descriptors);
+      expect(descriptions).toHaveLength(18);
+      descriptions.map((descript) => {
+        expect(descript).toHaveProperty('id');
+        expect(descript).toHaveProperty('text');
+        expect(descript).toHaveProperty('subtheme_id');
+      });
+    });
   });
 });
