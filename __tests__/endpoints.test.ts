@@ -50,9 +50,34 @@ describe('testing endpoints', () => {
         }
       }
     });
-    test.todo('200: returns array of all topics');
-    test.todo('200: topics are returned with correct properties');
-    test.todo('500: handles database connection errors');
+    test('200: returns array of all topics', async () => {
+      await testApiHandler({
+        appHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+          expect(response.status).toBe(200);
+          expect(data.length).not.toBe(0);
+        },
+      });
+    });
+    test('200: topics are returned with correct properties', async () => {
+      await testApiHandler({
+        appHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+
+          expect(response.status).toBe(200);
+          expect(data.length).not.toBe(0);
+          data.forEach((topic) => {
+            expect(typeof topic.id).toBe('number');
+            expect(typeof topic.name).toBe('string');
+            expect(typeof topic.description).toBe('string');
+          });
+        },
+      });
+    });
   });
 });
 
