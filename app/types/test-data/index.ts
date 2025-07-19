@@ -1,6 +1,6 @@
-import { Topics } from "./topics";
-import { Themes } from "./themes";
-import { Subthemes } from "./subtheme";
-import { Descriptors } from "./descriptors";
+import { Topics } from './topics.ts';
+import { Themes } from './themes.ts';
+import { Subthemes } from './subtheme.ts';
+import Descriptors from './descriptors.ts';
 
-export type {Topics, Themes, Subthemes, Descriptors}
+export type { Topics, Themes, Subthemes, Descriptors };
