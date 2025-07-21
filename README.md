@@ -17,3 +17,34 @@ npm run db:migrate
 # Or push schema directly (like prisma db push)
 
 npm run db:push
+
+# ENDPOINTS DESIGN
+
+GET /api/topics # List all topics
+GET /api/topics/[id] # Get single topic
+POST /api/topics # Create topic
+PUT /api/topics/[id] # Update topic
+DELETE /api/topics/[id] # Delete topic
+
+GET /api/themes # List all themes
+GET /api/themes/[id] # Get single theme
+POST /api/themes # Create theme
+PUT /api/themes/[id] # Update theme
+DELETE /api/themes/[id] # Delete theme
+
+GET /api/topics/[id]/themes # Get themes for a topic (ordered)
+GET /api/topics/[id]/full # Get topic with all nested data
+
+GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
+GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
+GET /api/hierarchy # Full tree structure
+GET /api/topics/[id]/tree # Tree for specific topic
+
+Extension
+GET /api/search?q=term # Search across all levels
+GET /api/topics/[id]/search?q=term # Search within a topic
+
+# Intergration testing with
+
+https://blog.arcjet.com/testing-next-js-app-router-api-routes/
+https://www.npmjs.com/package/next-test-api-route-handler#install

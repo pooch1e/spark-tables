@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.test' });
 
 import { sql } from 'drizzle-orm';
-
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
