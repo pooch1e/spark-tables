@@ -44,6 +44,11 @@ Extension
 GET /api/search?q=term # Search across all levels
 GET /api/topics/[id]/search?q=term # Search within a topic
 
+# TODO
+- add error handling and edge cases to endpoint testing eg if no topic exists on id return better messaging to user
+- add endpoint.json to track all endpoints, serve up on /api
+
+
 # Intergration testing with
 
 https://blog.arcjet.com/testing-next-js-app-router-api-routes/
