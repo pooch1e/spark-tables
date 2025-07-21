@@ -114,7 +114,29 @@ describe('testing endpoints', () => {
         },
       });
     });
-    test.todo('200: returns empty array when no themes exist');
+    test('200: returns empty array when no themes exist', async () => {
+      const expected: Array<>[] = [];
+      const existingThemes = await db.select().from(themes);
+
+      await db.delete(topics);
+      try {
+        await testApiHandler({
+          appHandler: appHandlerThemes,
+          test: async ({ fetch }) => {
+            const response = await fetch({ method: 'GET' });
+            const json = await response.json();
+            expect(response.status).toBe(200);
+            expect(json.data).toEqual(expected);
+          },
+        });
+      } catch (err) {
+        console.log(err, 'err in testing empty topics');
+      } finally {
+        if (existingThemes.length > 0) {
+          await db.insert(topics).values(existingThemes);
+        }
+      }
+    });
   });
 });
 
