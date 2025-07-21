@@ -1,8 +1,8 @@
 import { testApiHandler } from 'next-test-api-route-handler';
 import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
-import * as appHandler from '@/app/api/topics/route';
-import * as appHandlerTopicById from '../app/api/topics/[id]/route.ts';
+import * as topicHandler from '@/app/api/topics/route.ts';
+import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
 import * as appHandlerThemes from '../app/api/themes/route.ts';
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
@@ -14,7 +14,7 @@ import {
   descriptors as descriptorData,
 } from '../data/test-data/index.ts';
 
-console.log('Connected to DB:', process.env.TEST_DATABASE_URL);
+// console.log('Connected to DB:', process.env.TEST_DATABASE_URL);
 beforeAll(async () => {
   await db.delete(descriptors);
   await db.delete(subthemes);
@@ -31,7 +31,7 @@ describe('testing endpoints', () => {
   describe('GET: api/topics', () => {
     test('200: returns array of objects with all topics data', async () => {
       await testApiHandler({
-        appHandler,
+        appHandler: topicHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
           const { data } = await response.json();
@@ -42,12 +42,21 @@ describe('testing endpoints', () => {
     });
     test('200: returns empty array when no topics exist', async () => {
       const expected: Array<>[] = [];
+
+      // Save existing data
+      const existingDescriptors = await db.select().from(descriptors);
+      const existingSubthemes = await db.select().from(subthemes);
+      const existingThemes = await db.select().from(themes);
       const existingTopics = await db.select().from(topics);
 
+      // Delete in correct order (children first)
+      await db.delete(descriptors);
+      await db.delete(subthemes);
+      await db.delete(themes);
       await db.delete(topics);
       try {
         await testApiHandler({
-          appHandler,
+          appHandler: topicHandler,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
             const json = await response.json();
@@ -61,11 +70,20 @@ describe('testing endpoints', () => {
         if (existingTopics.length > 0) {
           await db.insert(topics).values(existingTopics);
         }
+        if (existingThemes.length > 0) {
+          await db.insert(themes).values(existingThemes);
+        }
+        if (existingSubthemes.length > 0) {
+          await db.insert(subthemes).values(existingSubthemes);
+        }
+        if (existingDescriptors.length > 0) {
+          await db.insert(descriptors).values(existingDescriptors);
+        }
       }
     });
     test('200: topics are returned with correct properties', async () => {
       await testApiHandler({
-        appHandler,
+        appHandler: topicHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
           const { data } = await response.json();
@@ -91,13 +109,37 @@ describe('testing endpoints', () => {
       };
       await testApiHandler({
         params: { id: '1' },
-        appHandler: appHandlerTopicById,
+        appHandler: topicIdHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
           const { data } = await response.json();
 
           expect(data.id).toBe(1);
           expect(data).toEqual(expected);
+        },
+      });
+    });
+  });
+  describe('POST: api/topics', () => {
+    test('201: returns a newly created topic object with correct properties', async () => {
+      const expected = {
+        name: 'Test Topic Name',
+        description: 'Test Topic Description',
+      };
+      await testApiHandler({
+        appHandler: topicHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(expected),
+          });
+          expect(response.status).toBe(201);
+
+          const result = await response.json();
+          const { data } = result;
+          expect(data.id).toBe(3);
+          expect(data.description).toBe('Test Topic Description');
         },
       });
     });
@@ -116,7 +158,17 @@ describe('testing endpoints', () => {
     });
     test('200: returns empty array when no themes exist', async () => {
       const expected: Array<>[] = [];
+      // Save existing data
+      const existingDescriptors = await db.select().from(descriptors);
+      const existingSubthemes = await db.select().from(subthemes);
       const existingThemes = await db.select().from(themes);
+      const existingTopics = await db.select().from(topics);
+
+      // Delete in correct order (children first)
+      await db.delete(descriptors);
+      await db.delete(subthemes);
+      await db.delete(themes);
+      await db.delete(topics);
 
       await db.delete(topics);
       try {
@@ -132,8 +184,17 @@ describe('testing endpoints', () => {
       } catch (err) {
         console.log(err, 'err in testing empty topics');
       } finally {
+        if (existingTopics.length > 0) {
+          await db.insert(topics).values(existingTopics);
+        }
         if (existingThemes.length > 0) {
-          await db.insert(topics).values(existingThemes);
+          await db.insert(themes).values(existingThemes);
+        }
+        if (existingSubthemes.length > 0) {
+          await db.insert(subthemes).values(existingSubthemes);
+        }
+        if (existingDescriptors.length > 0) {
+          await db.insert(descriptors).values(existingDescriptors);
         }
       }
     });

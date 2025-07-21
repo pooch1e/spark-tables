@@ -31,4 +31,15 @@ export class TopicService {
       throw new Error('Failed to fetch topic from database');
     }
   }
+
+  static async postTopic({ body }) {
+    try {
+      const insertedTopic = await db.insert(topics).values(body).returning();
+      const topic = insertedTopic[0];
+      return topic;
+    } catch (err) {
+      console.log(err, 'error posting topic');
+      throw new Error('Failed to post topic to database');
+    }
+  }
 }
