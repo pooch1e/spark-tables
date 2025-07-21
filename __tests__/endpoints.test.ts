@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as appHandler from '@/app/api/topics/route';
 import * as appHandlerTopicById from '../app/api/topics/[id]/route.ts';
+import * as appHandlerThemes from '../app/api/themes/route.ts';
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -28,6 +29,17 @@ beforeAll(async () => {
 
 describe('testing endpoints', () => {
   describe('GET: api/topics', () => {
+    test('200: returns array of objects with all topics data', async () => {
+      await testApiHandler({
+        appHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+          expect(response.status).toBe(200);
+          expect(data.length).not.toBe(0);
+        },
+      });
+    });
     test('200: returns empty array when no topics exist', async () => {
       const expected: Array<>[] = [];
       const existingTopics = await db.select().from(topics);
@@ -50,17 +62,6 @@ describe('testing endpoints', () => {
           await db.insert(topics).values(existingTopics);
         }
       }
-    });
-    test('200: returns array of all topics', async () => {
-      await testApiHandler({
-        appHandler,
-        test: async ({ fetch }) => {
-          const response = await fetch({ method: 'GET' });
-          const { data } = await response.json();
-          expect(response.status).toBe(200);
-          expect(data.length).not.toBe(0);
-        },
-      });
     });
     test('200: topics are returned with correct properties', async () => {
       await testApiHandler({
@@ -100,6 +101,20 @@ describe('testing endpoints', () => {
         },
       });
     });
+  });
+  describe('GET: api/themes', () => {
+    test('200: returns array of objects with all themes', async () => {
+      await testApiHandler({
+        appHandler: appHandlerThemes,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+          expect(response.status).toBe(200);
+          expect(data.length).not.toBe(0);
+        },
+      });
+    });
+    test.todo('200: returns empty array when no themes exist');
   });
 });
 
