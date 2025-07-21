@@ -137,6 +137,23 @@ describe('testing endpoints', () => {
         }
       }
     });
+    test('topics are returned with correct properties', async () => {
+      await testApiHandler({
+        appHandler: appHandlerThemes,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+          expect(response.status).toBe(200);
+          expect(data.length).not.toBe(0);
+          data.forEach((theme) => {
+            expect(typeof theme.id).toBe('number');
+            expect(typeof theme.name).toBe('string');
+            expect(typeof theme.order).toBe('number');
+            expect(typeof theme.topic_id).toBe('number');
+          });
+        },
+      });
+    });
   });
 });
 
