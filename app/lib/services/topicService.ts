@@ -42,4 +42,15 @@ export class TopicService {
       throw new Error('Failed to post topic to database');
     }
   }
+
+  static async deleteTopicById(id: number) {
+    console.log(id, 'body in service');
+    try {
+      await db.delete(topics).where(eq(topics.id, id));
+      return null;
+    } catch (err) {
+      console.log(err, 'error in deleting topic');
+      throw new Error('Failed to delete topic');
+    }
+  }
 }

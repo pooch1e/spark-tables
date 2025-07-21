@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
-import * as appHandlerThemes from '../app/api/themes/route.ts';
+import * as themeHandler from '../app/api/themes/route.ts';
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -144,10 +144,22 @@ describe('testing endpoints', () => {
       });
     });
   });
+  describe('DELETE /api/topics/[id]', () => {
+    test('200: topic deleted succesfully', async () => {
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'DELETE' });
+          expect(response.status).toBe(204);
+        },
+      });
+    });
+  });
   describe('GET: api/themes', () => {
     test('200: returns array of objects with all themes', async () => {
       await testApiHandler({
-        appHandler: appHandlerThemes,
+        appHandler: themeHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
           const { data } = await response.json();
@@ -173,7 +185,7 @@ describe('testing endpoints', () => {
       await db.delete(topics);
       try {
         await testApiHandler({
-          appHandler: appHandlerThemes,
+          appHandler: themeHandler,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
             const json = await response.json();
@@ -198,9 +210,9 @@ describe('testing endpoints', () => {
         }
       }
     });
-    test('topics are returned with correct properties', async () => {
+    test('themes are returned with correct properties', async () => {
       await testApiHandler({
-        appHandler: appHandlerThemes,
+        appHandler: themeHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
           const { data } = await response.json();
