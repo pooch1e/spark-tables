@@ -2,6 +2,7 @@ import { testApiHandler } from 'next-test-api-route-handler';
 import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as appHandler from '@/app/api/topics/route';
+import * as appHandlerTopicById from '../app/api/topics/[id]/route.ts';
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -75,6 +76,27 @@ describe('testing endpoints', () => {
             expect(typeof topic.name).toBe('string');
             expect(typeof topic.description).toBe('string');
           });
+        },
+      });
+    });
+  });
+  describe('GET: api/topics/:topic_id', () => {
+    test('200: returns topic with correct id', async () => {
+      const expected = {
+        id: 1,
+        name: 'Wilderness',
+        description:
+          'The majority of any realm, where even rough trails are a rare sight',
+      };
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: appHandlerTopicById,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+
+          expect(data.id).toBe(1);
+          expect(data).toEqual(expected);
         },
       });
     });
