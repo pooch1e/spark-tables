@@ -1,6 +1,7 @@
 import { db } from '@/db/connections';
-import { topics } from '@/db/schema';
+import { topics, themes, subthemes, descriptors } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { nestTopicData } from '../utils/nestTopicData';
 
 export class TopicService {
   static async getAllTopics() {
@@ -13,6 +14,23 @@ export class TopicService {
     } catch (err) {
       console.log(err, 'Database error in getAllTopics');
       throw new Error('Failed to fetch topics from database');
+    }
+  }
+
+  static async getAllTopicsData(id: number) {
+    try {
+      const result = await db
+        .select()
+        .from(topics)
+        .where(eq(topics.id, id))
+        .leftJoin(themes, eq(themes.topic_id, topics.id))
+        .leftJoin(subthemes, eq(subthemes.theme_id, themes.id))
+        .leftJoin(descriptors, eq(descriptors.subtheme_id, subthemes.id));
+      
+      const nestedData = nestTopicData(result);
+      return nestedData;
+    } catch (err) {
+      console.log(err, 'error fetching all nested topic data');
     }
   }
 

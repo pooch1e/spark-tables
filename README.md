@@ -33,7 +33,7 @@ PUT /api/themes/[id] # Update theme -- stretch goal
 DELETE /api/themes/[id] # Delete theme
 
 GET /api/topics/[id]/themes # Get themes for a topic (ordered)
-GET /api/topics/[id]/full # Get topic with all nested data
+GET /api/topics/[id]/all # Get topic with all nested data
 
 GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
 GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
@@ -46,6 +46,7 @@ GET /api/topics/[id]/search?q=term # Search within a topic
 
 # TODO
 - add error handling and edge cases to endpoint testing eg if no topic exists on id return better messaging to user
+- add error handling for themes with no topic id
 - add endpoint.json to track all endpoints, serve up on /api
 
 

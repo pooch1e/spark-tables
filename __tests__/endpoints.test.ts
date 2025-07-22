@@ -3,7 +3,8 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
-import * as topicIdHandlerThemesId from '../app/api/topics/[id]/themes/route.ts'
+import * as topicIdHandlerThemesId from '../app/api/topics/[id]/themes/route.ts';
+import * as topicHandlerIdAllData from '../app/api/topics/[id]/all/route.ts';
 import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 
@@ -123,16 +124,34 @@ describe('testing endpoints', () => {
       });
     });
     describe('GET api/topics/[id]/themes', () => {
-      test('200: returns array of objects where themes match topic id', async () => {
+      test('200: returns array of theme objects where themes match topic id', async () => {
         await testApiHandler({
           params: { id: '1' },
           appHandler: topicIdHandlerThemesId,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
             const { data } = await response.json();
-            console.log(data);
+
             expect(data).not.toHaveLength(0);
             expect(data).toHaveLength(2);
+            data.forEach((theme) => {
+              expect(theme.topic_id).toBe(1);
+            });
+          },
+        });
+      });
+    });
+    describe('GET: api/topics/[id]/all', () => {
+      test('returns array of topics with all nested data', async () => {
+        await testApiHandler({
+          params: { id: '1' },
+          appHandler: topicHandlerIdAllData,
+          test: async ({ fetch }) => {
+            const response = await fetch({ method: 'GET' });
+            const { data } = response;
+            console.log(data);
+            expect(data).not.toHaveLength(0);
+            // add tests for what shape of data to expect
           },
         });
       });
