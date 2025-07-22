@@ -243,11 +243,14 @@ describe('testing endpoints', () => {
           expect(response.status).toBe(201);
           const result = await response.json();
           const { data } = result;
-          console.log(data);
+          expect(data.id).toBe(5);
+          expect(data.name).toBe('Test Name');
+          expect(data.order).toBe(1);
+          expect(data.topic_id).toBe(2);
         },
       });
-      test.todo('Theme object has correct topic_id');
     });
+    test.todo('Theme object has correct topic_id');
   });
 });
 

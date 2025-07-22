@@ -16,9 +16,8 @@ export class ThemeService {
   }
 
   static async postTheme({ body }) {
-    console.log(body, 'body in service');
     try {
-      const newTheme = await db.insert(themes).values( body ).returning();
+      const newTheme = await db.insert(themes).values(body).returning();
       const theme = newTheme[0];
       return theme;
     } catch (err) {
