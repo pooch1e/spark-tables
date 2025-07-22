@@ -1,18 +1,64 @@
 import { db } from '@/db/connections';
 import { themes } from '@/db/schema';
-
+import { eq } from 'drizzle-orm';
 
 export class ThemeService {
   static async getAllThemes() {
     try {
       const allThemes = await db.select().from(themes);
       if (allThemes.length === 0) {
-        return []
+        return [];
       }
       return allThemes;
     } catch (err) {
-      console.log(err, 'error in fetching themes from service')
+      console.log(err, 'error in fetching themes from service');
       throw new Error('Failed to fetch themes from database');
+    }
+  }
+
+  static async postTheme({ body }) {
+    try {
+      const newTheme = await db.insert(themes).values(body).returning();
+      const theme = newTheme[0];
+      return theme;
+    } catch (err) {
+      console.log(err, 'error in posting new theme');
+      throw new Error('Failed to post theme to database');
+    }
+  }
+
+  static async getThemeById(id: number) {
+    try {
+      const result = await db.select().from(themes).where(eq(themes.id, id));
+      const theme = result[0];
+      return theme;
+    } catch (err) {
+      console.log(err, 'error fetching theme by id');
+      throw new Error('Failed to fetch theme from database');
+    }
+  }
+
+  static async deleteThemeById(id: number) {
+    try {
+      await db.delete(themes).where(eq(themes.id, id));
+      return null;
+    } catch (err) {
+      console.log(err, 'error in deleting theme by theme id');
+      throw new Error('Failed to delete theme by theme id');
+    }
+  }
+
+  static async getThemesByTopicId(topic_id: number) {
+    try {
+      const themesById = await db
+        .select()
+        .from(themes)
+        .where(eq(themes.topic_id, topic_id));
+      
+      return themesById;
+    } catch (err) {
+      console.log(err, 'error in fetching themes by topic id');
+      throw new Error('Failed to fetch themes by topic id');
     }
   }
 }

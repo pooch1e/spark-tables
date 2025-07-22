@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
-        error: 'Failed to update topics',
+        error: 'Failed to post topic',
       },
       { status: 400 }
     );
