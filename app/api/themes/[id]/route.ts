@@ -28,3 +28,36 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params;
+    const numericId: number = Number(id);
+
+    // validate id
+    if (isNaN(numericId)) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Invalid theme ID',
+        },
+        { status: 400 }
+      );
+    }
+    await ThemeService.deleteTopicById(numericId);
+
+    return new Response(null, { status: 204 });
+  } catch (err) {
+    console.log(err, 'error in deleting Theme');
+    return Response.json(
+      {
+        success: false,
+        error: 'Failed to delete Theme',
+      },
+      { status: 400 }
+    );
+  }
+}

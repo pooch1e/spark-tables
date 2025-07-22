@@ -37,4 +37,14 @@ export class ThemeService {
       throw new Error('Failed to fetch theme from database');
     }
   }
+
+  static async deleteTopicById(id: number) {
+    try {
+      await db.delete(themes).where(eq(themes.id, id));
+      return null;
+    } catch (err) {
+      console.log(err, 'error in deleting theme by theme id');
+      throw new Error('Failed to delete theme by theme id');
+    }
+  }
 }
