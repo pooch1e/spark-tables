@@ -47,4 +47,18 @@ export class ThemeService {
       throw new Error('Failed to delete theme by theme id');
     }
   }
+
+  static async getThemesByTopicId(topic_id: number) {
+    try {
+      const themesById = await db
+        .select()
+        .from(themes)
+        .where(eq(themes.topic_id, topic_id));
+      
+      return themesById;
+    } catch (err) {
+      console.log(err, 'error in fetching themes by topic id');
+      throw new Error('Failed to fetch themes by topic id');
+    }
+  }
 }

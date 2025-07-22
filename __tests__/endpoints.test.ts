@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
+import * as topicIdHandlerThemesId from '../app/api/topics/[id]/themes/route.ts'
 import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 
@@ -125,13 +126,13 @@ describe('testing endpoints', () => {
       test('200: returns array of objects where themes match topic id', async () => {
         await testApiHandler({
           params: { id: '1' },
-          appHandler: topicHandler,
+          appHandler: topicIdHandlerThemesId,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
             const { data } = await response.json();
             console.log(data);
             expect(data).not.toHaveLength(0);
-            expect(data).toHaveLength(4);
+            expect(data).toHaveLength(2);
           },
         });
       });
