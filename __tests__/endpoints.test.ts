@@ -3,8 +3,8 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
-import * as themeHandler from '../app/api/topics/themes/route.ts';
-import * as themeIdHandler from '../app/api/topics/themes/[id]/route.ts';
+import * as themeHandler from '../app/api/themes/route.ts';
+import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
