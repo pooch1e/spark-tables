@@ -128,8 +128,10 @@ describe('testing endpoints', () => {
           appHandler: topicHandler,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
-            const {data} = await response.json();
-            
+            const { data } = await response.json();
+            console.log(data);
+            expect(data).not.toHaveLength(0);
+            expect(data).toHaveLength(4);
           },
         });
       });

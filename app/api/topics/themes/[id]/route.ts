@@ -47,7 +47,7 @@ export async function DELETE(
         { status: 400 }
       );
     }
-    await ThemeService.deleteTopicById(numericId);
+    await ThemeService.deleteThemeById(numericId);
 
     return new Response(null, { status: 204 });
   } catch (err) {

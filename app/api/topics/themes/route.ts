@@ -1,4 +1,4 @@
-//get topics
+//get themes
 import { ThemeService } from '@/app/lib/services/themeService';
 export async function GET(request: Request) {
   try {

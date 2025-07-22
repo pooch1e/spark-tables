@@ -38,7 +38,7 @@ export class ThemeService {
     }
   }
 
-  static async deleteTopicById(id: number) {
+  static async deleteThemeById(id: number) {
     try {
       await db.delete(themes).where(eq(themes.id, id));
       return null;
