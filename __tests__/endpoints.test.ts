@@ -148,7 +148,9 @@ describe('testing endpoints', () => {
           appHandler: topicHandlerIdAllData,
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
-            const { data } = response;
+            const result = await response.json();
+            console.log(result);
+            const { data } = result;
             console.log(data);
             expect(data).not.toHaveLength(0);
             // add tests for what shape of data to expect

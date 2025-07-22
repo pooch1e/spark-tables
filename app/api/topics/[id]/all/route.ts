@@ -19,10 +19,8 @@ export async function GET(
   } catch (err) {
     console.log(err, 'error fetching topics nested data');
     return Response.json(
-      {
-        success: false,
-      },
-      { status: 400 }
+      { success: false, error: 'Failed to fetch nested topic data' },
+      { status: 500 }
     );
   }
 }
