@@ -1,0 +1,147 @@
+{
+  "GET /api/topics": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "exampleResponse": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Wilderness",
+          "description": "The majority of any realm, where even rough trails are a rare sight"
+        }
+      ]
+    }
+  },
+  "GET /api/topics/:id": {
+    "description": "serves a single topic by specified ID",
+    "exampleResponse": {
+      "data": {
+        "id": 1,
+        "name": "Wilderness",
+        "description": "The majority of any realm, where even rough trails are a rare sight"
+      }
+    }
+  },
+  "GET /api/topics/:id/themes": {
+    "description": "serves an array of themes that belong to the specified topic ID",
+    "exampleResponse": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Land",
+          "order": 1,
+          "topic_id": 1
+        }
+      ]
+    }
+  },
+  "GET /api/topics/:id/all": {
+    "description": "serves a topic with all nested data (themes, subthemes, descriptors)",
+    "exampleResponse": {
+      "data": {
+        "id": 1,
+        "name": "Wilderness",
+        "description": "The majority of any realm, where even rough trails are a rare sight",
+        "themes": [
+          {
+            "id": 1,
+            "name": "Land",
+            "order": 1,
+            "topic_id": 1,
+            "subthemes": [],
+            "descriptors": []
+          }
+        ]
+      }
+    }
+  },
+  "POST /api/topics": {
+    "description": "creates a new topic",
+    "examplePost": {
+      "name": "Test Topic Name",
+      "description": "Test Topic Description"
+    },
+    "exampleResponse": {
+      "data": {
+        "id": 3,
+        "name": "Test Topic Name",
+        "description": "Test Topic Description"
+      }
+    }
+  },
+  "DELETE /api/topics/:id": {
+    "description": "deletes a topic by specified ID",
+    "exampleResponse": {
+      "status": "204"
+    }
+  },
+  "GET /api/themes": {
+    "description": "serves an array of all themes",
+    "queries": [],
+    "exampleResponse": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Land",
+          "order": 1,
+          "topic_id": 1
+        }
+      ]
+    }
+  },
+  "POST /api/themes": {
+    "description": "creates a new theme",
+    "examplePost": {
+      "name": "Test Name",
+      "order": 1,
+      "topic_id": 2
+    },
+    "exampleResponse": {
+      "data": {
+        "id": 5,
+        "name": "Test Name",
+        "order": 1,
+        "topic_id": 2
+      }
+    }
+  },
+  "GET /api/themes/:id": {
+    "description": "serves a single theme by specified ID",
+    "exampleResponse": {
+      "data": {
+        "id": 1,
+        "name": "Land",
+        "order": 1,
+        "topic_id": 1
+      }
+    }
+  },
+  "DELETE /api/themes/:id": {
+    "description": "deletes a theme by specified ID",
+    "exampleResponse": {
+      "status": "204"
+    }
+  },
+  "GET /api/full": {
+    "description": "serves an array of nested objects representing the complete data tree (topics with themes, subthemes, and descriptors)",
+    "exampleResponse": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Wilderness",
+          "description": "The majority of any realm, where even rough trails are a rare sight",
+          "themes": [
+            {
+              "id": 1,
+              "name": "Land",
+              "order": 1,
+              "topic_id": 1,
+              "subthemes": [],
+              "descriptors": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
