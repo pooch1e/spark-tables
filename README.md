@@ -38,7 +38,6 @@ GET /api/topics/[id]/all # Get topic with all nested data
 GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
 GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
 GET /api/hierarchy # Full tree structure
-GET /api/topics/[id]/tree # Tree for specific topic
 
 Extension
 GET /api/search?q=term # Search across all levels

@@ -161,7 +161,7 @@ describe('testing endpoints', () => {
     test.todo('handles topic with no themes')
     test.todo('handles non-existent topic ID')
     test.todo('handles invalid topic ID');
-    
+
   });
   describe('POST: api/topics', () => {
     test('201: returns a newly created topic object with correct properties', async () => {
