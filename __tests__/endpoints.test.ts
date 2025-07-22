@@ -250,7 +250,21 @@ describe('testing endpoints', () => {
         },
       });
     });
-    test.todo('Theme object has correct topic_id');
+  });
+  describe('GET api/themes/[id]', () => {
+    test.todo('200: returns single theme object with correct id');
+  });
+  describe('DELETE /api/themes/[id]', () => {
+    test('200: Theme deleted succesfully', async () => {
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'DELETE' });
+          expect(response.status).toBe(204);
+        },
+      });
+    });
   });
 });
 
