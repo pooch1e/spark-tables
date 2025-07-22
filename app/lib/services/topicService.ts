@@ -44,7 +44,6 @@ export class TopicService {
   }
 
   static async deleteTopicById(id: number) {
-    console.log(id, 'body in service');
     try {
       await db.delete(topics).where(eq(topics.id, id));
       return null;

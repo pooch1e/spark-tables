@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
 import * as themeHandler from '../app/api/themes/route.ts';
+
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -15,15 +16,15 @@ import {
 } from '../data/test-data/index.ts';
 
 // console.log('Connected to DB:', process.env.TEST_DATABASE_URL);
-beforeAll(async () => {
+beforeEach(async () => {
   await db.delete(descriptors);
   await db.delete(subthemes);
   await db.delete(themes);
   await db.delete(topics);
-  await db.execute(sql`TRUNCATE TABLE topics RESTART IDENTITY CASCADE`);
-  await db.execute(sql`TRUNCATE TABLE themes RESTART IDENTITY CASCADE`);
-  await db.execute(sql`TRUNCATE TABLE subthemes RESTART IDENTITY CASCADE`);
-  await db.execute(sql`TRUNCATE TABLE descriptors RESTART IDENTITY CASCADE`);
+  await db.execute(sql`
+    TRUNCATE TABLE descriptors, subthemes, themes, topics 
+    RESTART IDENTITY CASCADE
+  `);
   await seed({ topicsTestData, themeTestData, subthemeData, descriptorData });
 });
 
@@ -226,6 +227,26 @@ describe('testing endpoints', () => {
           });
         },
       });
+    });
+  });
+  describe('POST /api/themes', () => {
+    test('201: returns a newly created theme object with correct properties', async () => {
+      const expected = { name: 'Test Name', order: 1, topic_id: 2 };
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(expected),
+          });
+          expect(response.status).toBe(201);
+          const result = await response.json();
+          const { data } = result;
+          console.log(data);
+        },
+      });
+      test.todo('Theme object has correct topic_id');
     });
   });
 });

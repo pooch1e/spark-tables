@@ -23,13 +23,13 @@ npm run db:push
 GET /api/topics # List all topics
 GET /api/topics/[id] # Get single topic
 POST /api/topics # Create topic
-PUT /api/topics/[id] # Update topic
+PUT /api/topics/[id] # Update topic -- stretch goal
 DELETE /api/topics/[id] # Delete topic
 
 GET /api/themes # List all themes
 GET /api/themes/[id] # Get single theme
 POST /api/themes # Create theme
-PUT /api/themes/[id] # Update theme
+PUT /api/themes/[id] # Update theme -- stretch goal
 DELETE /api/themes/[id] # Delete theme
 
 GET /api/topics/[id]/themes # Get themes for a topic (ordered)
