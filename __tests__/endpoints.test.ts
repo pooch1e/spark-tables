@@ -3,8 +3,8 @@ import { sql } from 'drizzle-orm';
 // Import the handler under test from the app directory
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
-import * as themeHandler from '../app/api/themes/route.ts';
-import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
+import * as themeHandler from '../app/api/topics/themes/route.ts';
+import * as themeIdHandler from '../app/api/topics/themes/[id]/route.ts';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
@@ -101,7 +101,7 @@ describe('testing endpoints', () => {
       });
     });
   });
-  describe('GET: api/topics/:topic_id', () => {
+  describe('GET: api/topics/[id]', () => {
     test('200: returns topic with correct id', async () => {
       const expected = {
         id: 1,
@@ -119,6 +119,19 @@ describe('testing endpoints', () => {
           expect(data.id).toBe(1);
           expect(data).toEqual(expected);
         },
+      });
+    });
+    describe('GET api/topics/[id]/themes', () => {
+      test('200: returns array of objects where themes match topic id', async () => {
+        await testApiHandler({
+          params: { id: '1' },
+          appHandler: topicHandler,
+          test: async ({ fetch }) => {
+            const response = await fetch({ method: 'GET' });
+            const {data} = await response.json();
+            
+          },
+        });
       });
     });
   });
