@@ -321,6 +321,9 @@ describe('testing endpoints', () => {
       });
     });
   });
+  describe('GET /api/full', () => {
+    test('200: Returns array of nested objects representing whole data tree')
+  })
 });
 
 afterAll(async () => {
