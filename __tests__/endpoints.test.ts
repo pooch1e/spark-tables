@@ -7,6 +7,7 @@ import * as topicIdHandlerThemesId from '../app/api/topics/[id]/themes/route.ts'
 import * as topicHandlerIdAllData from '../app/api/topics/[id]/all/route.ts';
 import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
+import * as allDataHandler from '../app/api/full/route.ts';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
@@ -149,19 +150,17 @@ describe('testing endpoints', () => {
           test: async ({ fetch }) => {
             const response = await fetch({ method: 'GET' });
             const result = await response.json();
-            console.log(result);
+
             const { data } = result;
-            console.log(data);
             expect(data).not.toHaveLength(0);
             // add tests for what shape of data to expect
           },
         });
       });
     });
-    test.todo('handles topic with no themes')
-    test.todo('handles non-existent topic ID')
+    test.todo('handles topic with no themes');
+    test.todo('handles non-existent topic ID');
     test.todo('handles invalid topic ID');
-
   });
   describe('POST: api/topics', () => {
     test('201: returns a newly created topic object with correct properties', async () => {
@@ -322,8 +321,22 @@ describe('testing endpoints', () => {
     });
   });
   describe('GET /api/full', () => {
-    test('200: Returns array of nested objects representing whole data tree')
-  })
+    test('200: Returns array of nested objects representing whole data tree', async () => {
+      await testApiHandler({
+        appHandler: allDataHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = response.json();
+          const { data } = await result;
+
+          expect(data).not.toHaveLength(0);
+        },
+      });
+    });
+    test.todo('handles topic with no themes');
+    test.todo('handles non-existent topic ID');
+    test.todo('handles invalid topic ID');
+  });
 });
 
 afterAll(async () => {

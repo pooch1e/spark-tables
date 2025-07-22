@@ -6,7 +6,7 @@ export async function GET(
   try {
     const { id } = params;
     const numericId: number = Number(id);
-    const allTopicsData = await TopicService.getAllTopicsData(numericId);
+    const allTopicsData = await TopicService.getAllTopicsDataById(numericId);
     return Response.json(
       {
         success: true,
