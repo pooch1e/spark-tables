@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import * as topicHandler from '@/app/api/topics/route.ts';
 import * as topicIdHandler from '../app/api/topics/[id]/route.ts';
 import * as themeHandler from '../app/api/themes/route.ts';
+import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
@@ -252,7 +253,20 @@ describe('testing endpoints', () => {
     });
   });
   describe('GET api/themes/[id]', () => {
-    test.todo('200: returns single theme object with correct id');
+    test('200: returns single theme object with correct id', async () => {
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { data } = await response.json();
+          expect(data.id).toBe(1);
+          expect(data.name).toBe('Land');
+          expect(data.order).toBe(1);
+          expect(data.topic_id).toBe(1);
+        },
+      });
+    });
   });
   describe('DELETE /api/themes/[id]', () => {
     test('200: Theme deleted succesfully', async () => {
