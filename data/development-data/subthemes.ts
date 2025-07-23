@@ -10,98 +10,195 @@ export const subthemes = [
     order: 2,
     theme_id: 1,
   },
-  {
-    name: 'Terrain Features',
-    order: 3,
-    theme_id: 1,
-  },
   // Wilderness → Sky
   {
-    name: 'Mood',
+    name: 'Tone',
     order: 1,
     theme_id: 2,
   },
   {
-    name: 'Weather',
+    name: 'Texture',
     order: 2,
     theme_id: 2,
   },
   // Wilderness → Flora
   {
-    name: 'Trees',
+    name: 'Nature',
     order: 1,
     theme_id: 3,
   },
   {
-    name: 'Ground Cover',
+    name: 'Form',
     order: 2,
     theme_id: 3,
   },
   // Wilderness → Fauna
   {
-    name: 'Creatures',
+    name: 'Nature',
     order: 1,
     theme_id: 4,
   },
   {
-    name: 'Sounds',
+    name: 'Form',
     order: 2,
     theme_id: 4,
   },
-  // Civilisation → People
+  // wilderness -> water
   {
-    name: 'Dress',
+    name: 'Tone',
     order: 1,
     theme_id: 5,
   },
-  {
-    name: 'Behaviour',
-    order: 2,
-    theme_id: 5,
-  },
-  {
-    name: 'Social Classes',
-    order: 3,
-    theme_id: 5,
-  },
-  // Civilisation → Streets
   {
     name: 'Texture',
+    order: 2,
+    theme_id: 5,
+  },
+  // wilderness -> Weather
+  {
+    name: 'Description',
     order: 1,
     theme_id: 6,
   },
   {
-    name: 'Activity',
+    name: 'Element',
     order: 2,
     theme_id: 6,
   },
-  // Civilisation → Buildings
+  // Wilderness -> Feature
   {
-    name: 'Materials',
+    name: 'Nature',
     order: 1,
     theme_id: 7,
   },
   {
-    name: 'Condition',
+    name: 'Form',
     order: 2,
     theme_id: 7,
   },
+  // Wilderness -> Wonder
   {
-    name: 'Purpose',
-    order: 3,
-    theme_id: 7,
-  },
-  // Civilisation → Commerce
-  {
-    name: 'Markets',
+    name: 'Theme',
     order: 1,
     theme_id: 8,
   },
   {
-    name: 'Goods',
+    name: 'Element',
     order: 2,
     theme_id: 8,
   },
+  // Wilderness -> Otherworld
+  {
+    name: 'Character',
+    order: 1,
+    theme_id: 9,
+  },
+  {
+    name: 'Landscape',
+    order: 2,
+    theme_id: 9,
+  },
+
+  // Civilisation → Holding
+  {
+    name: 'Style',
+    order: 1,
+    theme_id: 10,
+  },
+  {
+    name: 'Feature',
+    order: 2,
+    theme_id: 10,
+  },
+  // Civ -> Bailey
+  {
+    name: 'Style',
+    order: 1,
+    theme_id: 11,
+  },
+  {
+    name: 'Feature',
+    order: 2,
+    theme_id: 1,
+  },
+  //Civ -> Keep
+  {
+    name: 'Centrerpiece',
+    order: 1,
+    theme_id: 12,
+  },
+  {
+    name: 'Decoration',
+    order: 2,
+    theme_id: 12,
+  },
+  //Civ -> Person
+  {
+    name: 'Appearance',
+    order: 1,
+    theme_id: 13,
+  },
+  {
+    name: 'Manner',
+    order: 2,
+    theme_id: 13,
+  },
+  //Civ -> Ambition
+  {
+    name: 'Desire',
+    order: 1,
+    theme_id: 14,
+  },
+  {
+    name: 'Motive',
+    order: 2,
+    theme_id: 14,
+  },
+  //Civ -> Relationship
+  {
+    name: 'State',
+    order: 1,
+    theme_id: 15,
+  },
+  {
+    name: 'Connection',
+    order: 2,
+    theme_id: 15,
+  },
+  //Civ -> Drama
+  {
+    name: 'Theme',
+    order: 1,
+    theme_id: 16,
+  },
+  {
+    name: 'Detail',
+    order: 2,
+    theme_id: 16,
+  },
+  //Civ -> Crisis
+  {
+    name: 'Description',
+    order: 1,
+    theme_id: 17,
+  },
+  {
+    name: 'Incident',
+    order: 2,
+    theme_id: 17,
+  },
+  //Civ -> Task
+  {
+    name: 'Action',
+    order: 1,
+    theme_id: 18,
+  },
+  {
+    name: 'Subject',
+    order: 2,
+    theme_id: 18,
+  },
+
   // Dungeons → Architecture
   {
     name: 'Construction',
