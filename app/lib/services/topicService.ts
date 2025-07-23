@@ -17,7 +17,25 @@ export class TopicService {
     }
   }
 
-  static async getAllTopicsData(id: number) {
+  static async getAllTopicsData() {
+    try {
+      const result = await db
+        .select()
+        .from(topics)
+        .leftJoin(themes, eq(themes.topic_id, topics.id))
+        .leftJoin(subthemes, eq(subthemes.theme_id, themes.id))
+        .leftJoin(descriptors, eq(descriptors.subtheme_id, subthemes.id));
+
+      const nestedData = nestTopicData(result);
+
+      return nestedData;
+    } catch (err) {
+      console.log(err, 'error fetching all nested topic data');
+      throw new Error('Failed to fetch nested data for topics');
+    }
+  }
+
+  static async getAllTopicsDataById(id: number) {
     try {
       const result = await db
         .select()

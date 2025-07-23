@@ -18,6 +18,40 @@ npm run db:migrate
 
 npm run db:push
 
+# ERD
+```mermaid
+erDiagram
+    topics {
+        serial id PK
+        text name
+        text description
+    }
+
+    themes {
+        serial id PK
+        text name
+        integer order
+        integer topic_id FK
+    }
+
+    subthemes {
+        serial id PK
+        text name
+        integer order
+        integer theme_id FK
+    }
+
+    descriptors {
+        serial id PK
+        text text
+        integer subtheme_id FK
+    }
+
+    topics ||--o{ themes : "has many"
+    themes ||--o{ subthemes : "has many"
+    subthemes ||--o{ descriptors : "has many"
+```
+
 # ENDPOINTS DESIGN
 
 GET /api/topics # List all topics
@@ -35,8 +69,8 @@ DELETE /api/themes/[id] # Delete theme
 GET /api/topics/[id]/themes # Get themes for a topic (ordered)
 GET /api/topics/[id]/all # Get topic with all nested data
 
-GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
-GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme
+GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme - extension
+GET /api/subthemes/[id]/descriptors # Get descriptors for a subtheme - extension
 GET /api/full # Full tree structure
 
 Extension
@@ -44,10 +78,10 @@ GET /api/search?q=term # Search across all levels
 GET /api/topics/[id]/search?q=term # Search within a topic
 
 # TODO
+
 - add error handling and edge cases to endpoint testing eg if no topic exists on id return better messaging to user
 - add error handling for themes with no topic id
 - add endpoint.json to track all endpoints, serve up on /api
-
 
 # Intergration testing with
 
