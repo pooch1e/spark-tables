@@ -19,11 +19,14 @@ export class ThemeService {
 
   static async postTheme({ body }) {
     try {
-      const {name} = body;
-      const existingTheme = await db.select().from(themes).where(eq(themes.name, name))
+      const { name } = body;
+      const existingTheme = await db
+        .select()
+        .from(themes)
+        .where(eq(themes.name, name));
 
       if (existingTheme.length > 0) {
-        throw new ConflictError('Theme name already exists')
+        throw new ConflictError('Theme name already exists');
       }
 
       const newTheme = await db.insert(themes).values(body).returning();
@@ -33,8 +36,8 @@ export class ThemeService {
       if (err instanceof ConflictError) {
         throw err;
       } else {
-        console.error('Database error in Posting Theme', err)
-        throw new DatabaseError('Failed to create theme')
+        console.error('Database error in Posting Theme', err);
+        throw new DatabaseError('Failed to create theme');
       }
     }
   }
