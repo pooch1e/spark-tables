@@ -380,6 +380,32 @@ describe('Error handling for endpoints', () => {
       });
     });
   });
+  describe('api/themes/[id]', () => {
+    test('400: returns error for non-valid ID', async () => {
+      await testApiHandler({
+        params: { id: 'test' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(400);
+          expect(result.error).toBe('Invalid ID');
+        },
+      });
+    });
+    test('404: returns error for non existent theme-id', async () => {
+      await testApiHandler({
+        params: { id: '99999' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(404);
+          expect(result.error).toBe('Theme was not found');
+        },
+      });
+    });
+  });
 });
 
 afterAll(async () => {
