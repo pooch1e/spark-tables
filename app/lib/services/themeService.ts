@@ -73,6 +73,9 @@ export class ThemeService {
         .from(themes)
         .where(eq(themes.topic_id, topic_id));
 
+      if (!themesById) {
+        throw new NotFoundError('Topic ID was not found');
+      }
       return themesById;
     } catch (err) {
       console.log(err, 'error in fetching themes by topic id');
