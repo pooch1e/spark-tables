@@ -18,6 +18,40 @@ npm run db:migrate
 
 npm run db:push
 
+# ERD
+```mermaid
+erDiagram
+    topics {
+        serial id PK
+        text name
+        text description
+    }
+
+    themes {
+        serial id PK
+        text name
+        integer order
+        integer topic_id FK
+    }
+
+    subthemes {
+        serial id PK
+        text name
+        integer order
+        integer theme_id FK
+    }
+
+    descriptors {
+        serial id PK
+        text text
+        integer subtheme_id FK
+    }
+
+    topics ||--o{ themes : "has many"
+    themes ||--o{ subthemes : "has many"
+    subthemes ||--o{ descriptors : "has many"
+```
+
 # ENDPOINTS DESIGN
 
 GET /api/topics # List all topics
