@@ -396,6 +396,24 @@ describe('Error handling for endpoints', () => {
         },
       });
     });
+    test('409: returns error when name of topic already exists', async () => {
+      await testApiHandler({
+        appHandler: topicHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Wilderness',
+              description: 'I exist already',
+            }),
+          });
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Topic name already exists');
+        },
+      });
+    });
   });
   describe('GET: api/themes/[id]', () => {
     test('400: returns error for non-valid ID', async () => {

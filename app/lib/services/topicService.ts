@@ -2,8 +2,12 @@ import { db } from '@/db/connections';
 import { topics, themes, subthemes, descriptors } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { nestTopicData } from '../utils/nestTopicData';
-import { NotFoundError, ValidationError } from './errorHandling.ts';
-import { DatabaseError } from 'pg';
+import {
+  NotFoundError,
+  ValidationError,
+  DatabaseError,
+  ConflictError,
+} from './errorHandling.ts';
 
 export class TopicService {
   static async getAllTopics() {
@@ -76,12 +80,26 @@ export class TopicService {
 
   static async postTopic({ body }) {
     try {
+      const { name, description } = body;
+      const existingTopic = await db
+        .select()
+        .from(topics)
+        .where(eq(topics.name, name));
+
+      if (existingTopic.length > 0) {
+        throw new ConflictError('Topic name already exists');
+      }
+
       const insertedTopic = await db.insert(topics).values(body).returning();
       const topic = insertedTopic[0];
       return topic;
     } catch (err) {
-      console.log(err, 'error posting topic');
-      throw new Error('Failed to post topic to database');
+      if (err instanceof ConflictError) {
+        throw err;
+      } else {
+        console.error('Database error in createTopic:', err);
+        throw new DatabaseError('Failed to create topic');
+      }
     }
   }
 
