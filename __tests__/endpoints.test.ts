@@ -457,6 +457,65 @@ describe('Error handling for endpoints', () => {
         },
       });
     });
+    test('400: returns error when name is missing', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              order: 1,
+              topic_id: 1,
+              // name missing
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Name is required');
+        },
+      });
+    });
+
+    test('400: returns error when order is not a number', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Test Theme',
+              order: 'invalid',
+              topic_id: 1,
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Order must be a number');
+        },
+      });
+    });
+
+    test('400: returns error when topic_id is negative', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Test Theme',
+              order: 1,
+              topic_id: -1,
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Topic ID must be a positive integer');
+        },
+      });
+    });
     test('409: returns error when name of theme already exists', async () => {
       const expected = { name: 'Land', order: 1, topic_id: 2 };
       await testApiHandler({
