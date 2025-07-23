@@ -1,6 +1,7 @@
 import { db } from '@/db/connections';
 import { themes } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { ConflictError, DatabaseError, NotFoundError } from './errorHandling';
 
 export class ThemeService {
   static async getAllThemes() {
@@ -18,23 +19,40 @@ export class ThemeService {
 
   static async postTheme({ body }) {
     try {
+      const { name } = body;
+      const existingTheme = await db
+        .select()
+        .from(themes)
+        .where(eq(themes.name, name));
+
+      if (existingTheme.length > 0) {
+        throw new ConflictError('Theme name already exists');
+      }
+
       const newTheme = await db.insert(themes).values(body).returning();
       const theme = newTheme[0];
       return theme;
     } catch (err) {
-      console.log(err, 'error in posting new theme');
-      throw new Error('Failed to post theme to database');
+      if (err instanceof ConflictError) {
+        throw err;
+      } else {
+        console.error('Database error in Posting Theme', err);
+        throw new DatabaseError('Failed to create theme');
+      }
     }
   }
 
   static async getThemeById(id: number) {
     try {
       const result = await db.select().from(themes).where(eq(themes.id, id));
+
       const theme = result[0];
+      if (!theme) {
+        throw new NotFoundError('Theme was not found');
+      }
       return theme;
     } catch (err) {
-      console.log(err, 'error fetching theme by id');
-      throw new Error('Failed to fetch theme from database');
+      throw err;
     }
   }
 
@@ -54,7 +72,10 @@ export class ThemeService {
         .select()
         .from(themes)
         .where(eq(themes.topic_id, topic_id));
-      
+
+      if (!themesById) {
+        throw new NotFoundError('Topic ID was not found');
+      }
       return themesById;
     } catch (err) {
       console.log(err, 'error in fetching themes by topic id');

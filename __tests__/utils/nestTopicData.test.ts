@@ -28,6 +28,22 @@ describe('nestTopicData', () => {
     });
   });
 
+  test('does not mutate data', () => {
+    const mockRows = [
+      {
+        topics: { id: 1, name: 'Wilderness', description: 'Wild areas' },
+        themes: null,
+        subthemes: null,
+        descriptors: null,
+      },
+    ];
+    const copyOfData = structuredClone(mockRows);
+    const result = nestTopicData(mockRows);
+
+    expect(result).toHaveLength(1);
+    expect(result).not.toEqual(copyOfData);
+  });
+
   test('creates topic with themes but no subthemes', () => {
     const mockRows = [
       {

@@ -2,6 +2,12 @@ import { db } from '@/db/connections';
 import { topics, themes, subthemes, descriptors } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { nestTopicData } from '../utils/nestTopicData';
+import {
+  NotFoundError,
+  ValidationError,
+  DatabaseError,
+  ConflictError,
+} from './errorHandling.ts';
 
 export class TopicService {
   static async getAllTopics() {
@@ -62,21 +68,38 @@ export class TopicService {
         .limit(1);
 
       const topic = topicById[0];
+      if (!topic) {
+        throw new NotFoundError('Topic was not found');
+      }
       return topic;
     } catch (err) {
-      console.log(err, 'error fetching topic by id');
-      throw new Error('Failed to fetch topic from database');
+      // console.log(err, 'error fetching topic by id');
+      throw err;
     }
   }
 
   static async postTopic({ body }) {
     try {
+      const { name, description } = body;
+      const existingTopic = await db
+        .select()
+        .from(topics)
+        .where(eq(topics.name, name));
+
+      if (existingTopic.length > 0) {
+        throw new ConflictError('Topic name already exists');
+      }
+
       const insertedTopic = await db.insert(topics).values(body).returning();
       const topic = insertedTopic[0];
       return topic;
     } catch (err) {
-      console.log(err, 'error posting topic');
-      throw new Error('Failed to post topic to database');
+      if (err instanceof ConflictError) {
+        throw err;
+      } else {
+        console.error('Database error in Posting Topic:', err);
+        throw new DatabaseError('Failed to create topic');
+      }
     }
   }
 

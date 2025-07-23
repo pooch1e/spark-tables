@@ -9,6 +9,8 @@ import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 import * as allDataHandler from '../app/api/full/route.ts';
 
+import { Topics, Themes, FullTree } from '@/app/types/index.ts';
+
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -46,7 +48,7 @@ describe('testing endpoints', () => {
       });
     });
     test('200: returns empty array when no topics exist', async () => {
-      const expected: Array<>[] = [];
+      const expected: Array<number>[] = [];
 
       // Save existing data
       const existingDescriptors = await db.select().from(descriptors);
@@ -95,7 +97,7 @@ describe('testing endpoints', () => {
 
           expect(response.status).toBe(200);
           expect(data.length).not.toBe(0);
-          data.forEach((topic) => {
+          data.forEach((topic: Topics) => {
             expect(typeof topic.id).toBe('number');
             expect(typeof topic.name).toBe('string');
             expect(typeof topic.description).toBe('string');
@@ -135,7 +137,7 @@ describe('testing endpoints', () => {
 
             expect(data).not.toHaveLength(0);
             expect(data).toHaveLength(2);
-            data.forEach((theme) => {
+            data.forEach((theme: Themes) => {
               expect(theme.topic_id).toBe(1);
             });
           },
@@ -153,7 +155,7 @@ describe('testing endpoints', () => {
 
             const { data } = result;
             expect(data).not.toHaveLength(0);
-            data.forEach((topic) => {
+            data.forEach((topic: FullTree) => {
               expect(topic).toHaveProperty('id');
               expect(topic).toHaveProperty('name');
               expect(topic).toHaveProperty('description');
@@ -218,7 +220,7 @@ describe('testing endpoints', () => {
       });
     });
     test('200: returns empty array when no themes exist', async () => {
-      const expected: Array<>[] = [];
+      const expected: Array<number>[] = [];
       // Save existing data
       const existingDescriptors = await db.select().from(descriptors);
       const existingSubthemes = await db.select().from(subthemes);
@@ -354,14 +356,186 @@ describe('testing endpoints', () => {
 });
 
 describe('Error handling for endpoints', () => {
-  describe('api/topics/[id]', () => {
+  describe('GET: api/topics/[id]', () => {
     test('400: returns error for non-valid ID', async () => {
-      
-    })
-  })
-})
+      await testApiHandler({
+        params: { id: 'test' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const { error } = await response.json();
+          expect(response.status).toBe(400);
+          expect(error).toContain('Invalid ID');
+        },
+      });
+    });
+    test('404: returns error for non existent topic-id', async () => {
+      await testApiHandler({
+        params: { id: '99999' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(404);
+          expect(result.error).toBe('Topic was not found');
+        },
+      });
+    });
+  });
+  describe('POST: api/topics', () => {
+    test('400: returns error when required fields are missing', async () => {
+      await testApiHandler({
+        appHandler: topicHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Name is required');
+        },
+      });
+    });
+    test('409: returns error when name of topic already exists', async () => {
+      await testApiHandler({
+        appHandler: topicHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Wilderness',
+              description: 'I exist already',
+            }),
+          });
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Topic name already exists');
+        },
+      });
+    });
+  });
+  describe('GET: api/themes/[id]', () => {
+    test('400: returns error for non-valid ID', async () => {
+      await testApiHandler({
+        params: { id: 'test' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(400);
+          expect(result.error).toBe('Invalid ID');
+        },
+      });
+    });
+    test('404: returns error for non existent theme-id', async () => {
+      await testApiHandler({
+        params: { id: '99999' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(404);
+          expect(result.error).toBe('Theme was not found');
+        },
+      });
+    });
+  });
+  describe('POST: api/themes', () => {
+    test('400: returns error when required fields are missing', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Name is required');
+        },
+      });
+    });
+    test('400: returns error when name is missing', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              order: 1,
+              topic_id: 1,
+              // name missing
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Name is required');
+        },
+      });
+    });
 
+    test('400: returns error when order is not a number', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Test Theme',
+              order: 'invalid',
+              topic_id: 1,
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Order must be a number');
+        },
+      });
+    });
 
+    test('400: returns error when topic_id is negative', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: 'Test Theme',
+              order: 1,
+              topic_id: -1,
+            }),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Topic ID must be a positive integer');
+        },
+      });
+    });
+    test('409: returns error when name of theme already exists', async () => {
+      const expected = { name: 'Land', order: 1, topic_id: 2 };
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(expected),
+          });
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Theme name already exists');
+        },
+      });
+    });
+  });
+});
 
 afterAll(async () => {
   await db.delete(descriptors);

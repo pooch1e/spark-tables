@@ -1,15 +1,16 @@
 import { ThemeService } from '@/app/lib/services/themeService';
 
+
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const topicId: string = params.id;
   try {
+    const topicId: string = await params.id;
     const numericId: number = Number(topicId);
-    
+
     const themesByTopicId = await ThemeService.getThemesByTopicId(numericId);
-    
+
     return Response.json(
       { success: true, data: themesByTopicId },
       { status: 200 }
