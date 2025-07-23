@@ -353,6 +353,16 @@ describe('testing endpoints', () => {
   });
 });
 
+describe('Error handling for endpoints', () => {
+  describe('api/topics/[id]', () => {
+    test('400: returns error for non-valid ID', async () => {
+      
+    })
+  })
+})
+
+
+
 afterAll(async () => {
   await db.delete(descriptors);
   await db.delete(subthemes);
