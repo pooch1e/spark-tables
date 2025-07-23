@@ -29,6 +29,22 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+
+    if (
+      !body.name ||
+      typeof body.name !== 'string' ||
+      body.name.trim() === '' ||
+      !body.order ||
+      typeof body.order !== 'number' ||
+      !body.topic_id ||
+      typeof body.topic_id !== 'number'
+    ) {
+      return Response.json(
+        { error: 'Theme must contain name, order and topic_id' },
+        { status: 400 }
+      );
+    }
+
     const postedTheme = await ThemeService.postTheme({ body });
     return Response.json(
       {

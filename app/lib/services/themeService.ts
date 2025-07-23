@@ -1,7 +1,7 @@
 import { db } from '@/db/connections';
 import { themes } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { NotFoundError } from './errorHandling';
+import { ConflictError, DatabaseError, NotFoundError } from './errorHandling';
 
 export class ThemeService {
   static async getAllThemes() {
@@ -19,12 +19,23 @@ export class ThemeService {
 
   static async postTheme({ body }) {
     try {
+      const {name} = body;
+      const existingTheme = await db.select().from(themes).where(eq(themes.name, name))
+
+      if (existingTheme.length > 0) {
+        throw new ConflictError('Theme name already exists')
+      }
+
       const newTheme = await db.insert(themes).values(body).returning();
       const theme = newTheme[0];
       return theme;
     } catch (err) {
-      console.log(err, 'error in posting new theme');
-      throw new Error('Failed to post theme to database');
+      if (err instanceof ConflictError) {
+        throw err;
+      } else {
+        console.error('Database error in Posting Theme', err)
+        throw new DatabaseError('Failed to create theme')
+      }
     }
   }
 

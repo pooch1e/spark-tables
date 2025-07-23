@@ -441,6 +441,24 @@ describe('Error handling for endpoints', () => {
       });
     });
   });
+  describe('POST: api/themes', () => {
+    test('400: returns error when required fields are missing', async () => {
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Theme must contain name, order and topic_id');
+        },
+      });
+    });
+    test.todo('409');
+  });
 });
 
 afterAll(async () => {

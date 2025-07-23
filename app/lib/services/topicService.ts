@@ -97,7 +97,7 @@ export class TopicService {
       if (err instanceof ConflictError) {
         throw err;
       } else {
-        console.error('Database error in createTopic:', err);
+        console.error('Database error in Posting Topic:', err);
         throw new DatabaseError('Failed to create topic');
       }
     }
