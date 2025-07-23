@@ -356,12 +356,31 @@ describe('testing endpoints', () => {
 describe('Error handling for endpoints', () => {
   describe('api/topics/[id]', () => {
     test('400: returns error for non-valid ID', async () => {
-      
-    })
-  })
-})
-
-
+      await testApiHandler({
+        params: { id: 'test' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(400);
+          expect(result.error).toBe('Invalid ID');
+        },
+      });
+    });
+    test('404: returns error for non existent topic-id', async () => {
+      await testApiHandler({
+        params: { id: '99999' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+          const result = await response.json();
+          expect(response.status).toBe(404);
+          expect(result.error).toBe('Topic was not found');
+        },
+      });
+    });
+  });
+});
 
 afterAll(async () => {
   await db.delete(descriptors);

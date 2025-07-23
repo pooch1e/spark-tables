@@ -2,6 +2,8 @@ import { db } from '@/db/connections';
 import { topics, themes, subthemes, descriptors } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { nestTopicData } from '../utils/nestTopicData';
+import { NotFoundError, ValidationError } from './errorHandling.ts';
+import { DatabaseError } from 'pg';
 
 export class TopicService {
   static async getAllTopics() {
@@ -62,10 +64,13 @@ export class TopicService {
         .limit(1);
 
       const topic = topicById[0];
+      if (!topic) {
+        throw new NotFoundError('Topic was not found');
+      }
       return topic;
     } catch (err) {
-      console.log(err, 'error fetching topic by id');
-      throw new Error('Failed to fetch topic from database');
+      // console.log(err, 'error fetching topic by id');
+      throw err;
     }
   }
 
