@@ -269,7 +269,7 @@ describe('testing endpoints', () => {
           const { data } = await response.json();
           expect(response.status).toBe(200);
           expect(data.length).not.toBe(0);
-          data.forEach((theme) => {
+          data.forEach((theme: Themes) => {
             expect(typeof theme.id).toBe('number');
             expect(typeof theme.name).toBe('string');
             expect(typeof theme.order).toBe('number');
@@ -338,7 +338,7 @@ describe('testing endpoints', () => {
           const result = response.json();
           const { data } = await result;
           expect(data).not.toHaveLength(0);
-          data.forEach((topic) => {
+          data.forEach((topic: FullTree) => {
             expect(topic).toHaveProperty('id');
             expect(topic).toHaveProperty('name');
             expect(topic).toHaveProperty('description');
