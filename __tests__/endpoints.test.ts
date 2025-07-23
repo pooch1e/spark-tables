@@ -153,7 +153,14 @@ describe('testing endpoints', () => {
 
             const { data } = result;
             expect(data).not.toHaveLength(0);
-            // add tests for what shape of data to expect
+            data.forEach((topic) => {
+              expect(topic).toHaveProperty('id');
+              expect(topic).toHaveProperty('name');
+              expect(topic).toHaveProperty('description');
+              expect(topic).toHaveProperty('themes');
+              //check themes nested array of objects exists
+              expect(topic.themes).not.toHaveLength(0);
+            });
           },
         });
       });
@@ -328,8 +335,15 @@ describe('testing endpoints', () => {
           const response = await fetch({ method: 'GET' });
           const result = response.json();
           const { data } = await result;
-
           expect(data).not.toHaveLength(0);
+          data.forEach((topic) => {
+            expect(topic).toHaveProperty('id');
+            expect(topic).toHaveProperty('name');
+            expect(topic).toHaveProperty('description');
+            expect(topic).toHaveProperty('themes');
+            //check themes nested array of objects exists
+            expect(topic.themes).not.toHaveLength(0);
+          });
         },
       });
     });
