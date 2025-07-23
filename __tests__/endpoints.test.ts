@@ -9,13 +9,7 @@ import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 import * as allDataHandler from '../app/api/full/route.ts';
 
-import {
-  Topics,
-  Themes,
-  Subthemes,
-  Descriptors,
-  FullTree,
-} from '@/app/types/index.ts';
+import { Topics, Themes, FullTree } from '@/app/types/index.ts';
 
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
