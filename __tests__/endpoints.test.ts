@@ -9,6 +9,14 @@ import * as themeHandler from '../app/api/themes/route.ts';
 import * as themeIdHandler from '../app/api/themes/[id]/route.ts';
 import * as allDataHandler from '../app/api/full/route.ts';
 
+import {
+  Topics,
+  Themes,
+  Subthemes,
+  Descriptors,
+  FullTree,
+} from '@/app/types/index.ts';
+
 import { closeConnection, db } from '@/db/connections.ts';
 import { seed } from '@/db/seeds/seed.ts';
 import { topics, themes, subthemes, descriptors } from '@/db/schema.ts';
@@ -46,7 +54,7 @@ describe('testing endpoints', () => {
       });
     });
     test('200: returns empty array when no topics exist', async () => {
-      const expected: Array<>[] = [];
+      const expected: Array<number>[] = [];
 
       // Save existing data
       const existingDescriptors = await db.select().from(descriptors);
@@ -95,7 +103,7 @@ describe('testing endpoints', () => {
 
           expect(response.status).toBe(200);
           expect(data.length).not.toBe(0);
-          data.forEach((topic) => {
+          data.forEach((topic: Topics) => {
             expect(typeof topic.id).toBe('number');
             expect(typeof topic.name).toBe('string');
             expect(typeof topic.description).toBe('string');
@@ -135,7 +143,7 @@ describe('testing endpoints', () => {
 
             expect(data).not.toHaveLength(0);
             expect(data).toHaveLength(2);
-            data.forEach((theme) => {
+            data.forEach((theme: Themes) => {
               expect(theme.topic_id).toBe(1);
             });
           },
@@ -153,7 +161,7 @@ describe('testing endpoints', () => {
 
             const { data } = result;
             expect(data).not.toHaveLength(0);
-            data.forEach((topic) => {
+            data.forEach((topic: FullTree) => {
               expect(topic).toHaveProperty('id');
               expect(topic).toHaveProperty('name');
               expect(topic).toHaveProperty('description');
@@ -218,7 +226,7 @@ describe('testing endpoints', () => {
       });
     });
     test('200: returns empty array when no themes exist', async () => {
-      const expected: Array<>[] = [];
+      const expected: Array<number>[] = [];
       // Save existing data
       const existingDescriptors = await db.select().from(descriptors);
       const existingSubthemes = await db.select().from(subthemes);

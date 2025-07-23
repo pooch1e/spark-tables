@@ -1,9 +1,5 @@
 import { ThemeService } from '@/app/lib/services/themeService';
-import {
-  NotFoundError,
-  ValidationError,
-  DatabaseError,
-} from '@/app/lib/services/errorHandling';
+
 
 export async function GET(
   request: Request,
