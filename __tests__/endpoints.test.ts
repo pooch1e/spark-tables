@@ -453,11 +453,26 @@ describe('Error handling for endpoints', () => {
           });
           expect(response.status).toBe(400);
           const { error } = await response.json();
-          expect(error).toContain('Theme must contain name, order and topic_id');
+          expect(error).toContain('Name is required');
         },
       });
     });
-    test.todo('409');
+    test('409: returns error when name of theme already exists', async () => {
+      const expected = { name: 'Land', order: 1, topic_id: 2 };
+      await testApiHandler({
+        appHandler: themeHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(expected),
+          });
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Theme name already exists');
+        },
+      });
+    });
   });
 });
 
