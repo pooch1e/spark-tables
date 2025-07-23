@@ -1,5 +1,6 @@
 import { db } from '../connections.ts';
 import { topics, themes, subthemes, descriptors } from '../schema.ts';
+import { sql } from 'drizzle-orm';
 
 export const seed = async ({
   topicsTestData,
@@ -14,7 +15,11 @@ export const seed = async ({
     await db.delete(subthemes);
     await db.delete(themes);
     await db.delete(topics);
-
+    // restart id at 0
+    await db.execute(sql`
+    TRUNCATE TABLE descriptors, subthemes, themes, topics 
+    RESTART IDENTITY CASCADE
+  `);
     // topics
     const insertedTopics = await db
       .insert(topics)
