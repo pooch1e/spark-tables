@@ -1,5 +1,9 @@
 //get topics
-
+import {
+  NotFoundError,
+  ValidationError,
+  DatabaseError,
+} from '@/app/lib/services/errorHandling';
 import { TopicService } from '@/app/lib/services/topicService';
 export async function GET(request: Request) {
   try {
@@ -30,6 +34,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const keys = Object.keys(body);
+    if (keys.length === 0) {
+      return Response.json({ error: 'Name is required' }, { status: 400 });
+    }
     const postedTopic = await TopicService.postTopic({ body });
     return Response.json(
       {

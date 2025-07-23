@@ -354,16 +354,16 @@ describe('testing endpoints', () => {
 });
 
 describe('Error handling for endpoints', () => {
-  describe('api/topics/[id]', () => {
+  describe('GET: api/topics/[id]', () => {
     test('400: returns error for non-valid ID', async () => {
       await testApiHandler({
         params: { id: 'test' },
         appHandler: topicIdHandler,
         test: async ({ fetch }) => {
           const response = await fetch({ method: 'GET' });
-          const result = await response.json();
+          const { error } = await response.json();
           expect(response.status).toBe(400);
-          expect(result.error).toBe('Invalid ID');
+          expect(error).toContain('Invalid ID');
         },
       });
     });
@@ -380,7 +380,24 @@ describe('Error handling for endpoints', () => {
       });
     });
   });
-  describe('api/themes/[id]', () => {
+  describe('POST: api/topics', () => {
+    test('400: returns error when required fields are missing', async () => {
+      await testApiHandler({
+        appHandler: topicHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Name is required');
+        },
+      });
+    });
+  });
+  describe('GET: api/themes/[id]', () => {
     test('400: returns error for non-valid ID', async () => {
       await testApiHandler({
         params: { id: 'test' },
