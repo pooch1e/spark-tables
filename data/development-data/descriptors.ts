@@ -251,22 +251,254 @@ export const descriptors = [
   { text: 'Island', subtheme_id: 18 },
   { text: 'Mountain', subtheme_id: 18 },
 
-  //Style: Civ → Holding
-  //Feature: Civ → Holding
-  //Style: Civ -> Bailey
-  //Feature: Civ -> Bailey
-  //Centrepiece: Civ -> Keep
-  //Decoration: Civ -> Keep
-  //Appearance: Civ -> Person
-  //Manner: Civ -> Person
-  //Desire: Civ -> Ambition
-  //Motive: Civ -> Ambition
-  //State: Civ -> Relationship
-  //Connection: Civ -> Relationship
-  //Theme: Civ -> Drama
-  //Detail: Civ -> Drama
-  //Description: Civ -> Crisis
-  //Incident: Civ -> Crisis
-  //Action: Civ -> Task
-  //Subject: Civ -> Task
+  // Style (Civilisation > Holding)
+  { text: 'Dark', subtheme_id: 19 },
+  { text: 'Ruined', subtheme_id: 19 },
+  { text: 'Hostile', subtheme_id: 19 },
+  { text: 'Ancient', subtheme_id: 19 },
+  { text: 'Ornate', subtheme_id: 19 },
+  { text: 'Wild', subtheme_id: 19 },
+  { text: 'Pristine', subtheme_id: 19 },
+  { text: 'Fortified', subtheme_id: 19 },
+  { text: 'Unfinished', subtheme_id: 19 },
+  { text: 'Welcoming', subtheme_id: 19 },
+  { text: 'Tall', subtheme_id: 19 },
+  { text: 'Bright', subtheme_id: 19 },
+
+  // Feature (Civilisation > Holding)
+  { text: 'Turrets', subtheme_id: 20 },
+  { text: 'Tower', subtheme_id: 20 },
+  { text: 'Wall', subtheme_id: 20 },
+  { text: 'Battlements', subtheme_id: 20 },
+  { text: 'Citadel', subtheme_id: 20 },
+  { text: 'Gate', subtheme_id: 20 },
+  { text: 'Spire', subtheme_id: 20 },
+  { text: 'Dome', subtheme_id: 20 },
+  { text: 'Beacons', subtheme_id: 20 },
+  { text: 'Bridge', subtheme_id: 20 },
+  { text: 'Pillars', subtheme_id: 20 },
+  { text: 'Moat', subtheme_id: 20 },
+
+  // Style (Civilisation > Bailey)
+  { text: 'Filthy', subtheme_id: 21 },
+  { text: 'Abandoned', subtheme_id: 21 },
+  { text: 'Joyous', subtheme_id: 21 },
+  { text: 'Sophisticated', subtheme_id: 21 },
+  { text: 'Industrious', subtheme_id: 21 },
+  { text: 'Humble', subtheme_id: 21 },
+  { text: 'Majestic', subtheme_id: 21 },
+  { text: 'Spiritual', subtheme_id: 21 },
+  { text: 'Rustic', subtheme_id: 21 },
+  { text: 'Solemn', subtheme_id: 21 },
+  { text: 'Bustling', subtheme_id: 21 },
+  { text: 'Immaculate', subtheme_id: 21 },
+
+  // Feature (Civilisation > Bailey)
+  { text: 'Marketplace', subtheme_id: 22 },
+  { text: 'Forge', subtheme_id: 22 },
+  { text: 'Library', subtheme_id: 22 },
+  { text: 'Fountain', subtheme_id: 22 },
+  { text: 'temple', subtheme_id: 22 },
+  { text: 'Forum', subtheme_id: 22 },
+  { text: 'Tomb', subtheme_id: 22 },
+  { text: 'Garden', subtheme_id: 22 },
+  { text: 'Hall', subtheme_id: 22 },
+  { text: 'Workshops', subtheme_id: 22 },
+  { text: 'Arena', subtheme_id: 22 },
+  { text: 'Garrison', subtheme_id: 22 },
+
+  // Centrepiece (Civilisation > Keep)
+  { text: 'Hearth', subtheme_id: 23 },
+  { text: 'Throne', subtheme_id: 23 },
+  { text: 'Musicians', subtheme_id: 23 },
+  { text: 'Pool', subtheme_id: 23 },
+  { text: 'Adivsers', subtheme_id: 23 },
+  { text: 'Servants', subtheme_id: 23 },
+  { text: 'Shrine', subtheme_id: 23 },
+  { text: 'Table', subtheme_id: 23 },
+  { text: 'Reliquary', subtheme_id: 23 },
+  { text: 'Cauldron', subtheme_id: 23 },
+  { text: 'Chandelier', subtheme_id: 23 },
+  { text: 'Guards', subtheme_id: 23 },
+
+  // Decoration (Civilisation > Keep)
+  { text: 'Silver', subtheme_id: 24 },
+  { text: 'Heraldry', subtheme_id: 24 },
+  { text: 'Hones', subtheme_id: 24 },
+  { text: 'Flowers', subtheme_id: 24 },
+  { text: 'Scripture', subtheme_id: 24 },
+  { text: 'Jewels', subtheme_id: 24 },
+  { text: 'Weaths', subtheme_id: 24 },
+  { text: 'Candels', subtheme_id: 24 },
+  { text: 'Fur', subtheme_id: 24 },
+  { text: 'Tapestries', subtheme_id: 24 },
+  { text: 'Shields', subtheme_id: 24 },
+
+  // Appearance (Civilisation > Person)
+  { text: 'Delicate', subtheme_id: 25 },
+  { text: 'Short', subtheme_id: 25 },
+  { text: 'Wild', subtheme_id: 25 },
+  { text: 'Hard', subtheme_id: 25 },
+  { text: 'Elderly', subtheme_id: 25 },
+  { text: 'Cold', subtheme_id: 25 },
+  { text: 'Warm', subtheme_id: 25 },
+  { text: 'Youthful', subtheme_id: 25 },
+  { text: 'Soft', subtheme_id: 25 },
+  { text: 'Groomed', subtheme_id: 25 },
+  { text: 'Tall', subtheme_id: 25 },
+  { text: 'Robust', subtheme_id: 25 },
+
+  // Manner (Civilisation > Person)
+  { text: 'Formal', subtheme_id: 26 },
+  { text: 'Soothing', subtheme_id: 26 },
+  { text: 'Cautious', subtheme_id: 26 },
+  { text: 'Intense', subtheme_id: 26 },
+  { text: 'Spiritual', subtheme_id: 26 },
+  { text: 'Studious', subtheme_id: 26 },
+  { text: 'Passionate', subtheme_id: 26 },
+  { text: 'Cynical', subtheme_id: 26 },
+  { text: 'Relaxed', subtheme_id: 26 },
+  { text: 'Rash', subtheme_id: 26 },
+  { text: 'Boisterous', subtheme_id: 26 },
+  { text: 'Friendly', subtheme_id: 26 },
+
+  // Desire (Civilisation > Ambition)
+  { text: 'Escape', subtheme_id: 27 },
+  { text: 'Wealth', subtheme_id: 27 },
+  { text: 'Status', subtheme_id: 27 },
+  { text: 'Knowledge', subtheme_id: 27 },
+  { text: 'Mastery', subtheme_id: 27 },
+  { text: 'Heirloom', subtheme_id: 27 },
+  { text: 'Successor', subtheme_id: 27 },
+  { text: 'Truth', subtheme_id: 27 },
+  { text: 'Travel', subtheme_id: 27 },
+  { text: 'Power', subtheme_id: 27 },
+  { text: 'Security', subtheme_id: 27 },
+  { text: 'Forgiveness', subtheme_id: 27 },
+
+  // Motive (Civilisation > Ambition)
+  { text: 'Freedom', subtheme_id: 28 },
+  { text: 'Love', subtheme_id: 28 },
+  { text: 'Legacy', subtheme_id: 28 },
+  { text: 'Recovery', subtheme_id: 28 },
+  { text: 'Revenge', subtheme_id: 28 },
+  { text: 'Duty', subtheme_id: 28 },
+  { text: 'Fear', subtheme_id: 28 },
+  { text: 'Guilt', subtheme_id: 28 },
+  { text: 'Recognition', subtheme_id: 28 },
+  { text: 'Defiance', subtheme_id: 28 },
+  { text: 'Curiosity', subtheme_id: 28 },
+  { text: 'Hatred', subtheme_id: 28 },
+
+  // State (Civilisation > Relationship)
+  { text: 'Adoring', subtheme_id: 29 },
+  { text: 'Reluctant', subtheme_id: 29 },
+  { text: 'Secret', subtheme_id: 29 },
+  { text: 'Estranged', subtheme_id: 29 },
+  { text: 'Hateful', subtheme_id: 29 },
+  { text: 'Distant', subtheme_id: 29 },
+  { text: 'Harmonious', subtheme_id: 29 },
+  { text: 'Friendly', subtheme_id: 29 },
+  { text: 'Recent', subtheme_id: 29 },
+  { text: 'Sworn', subtheme_id: 29 },
+  { text: 'Tumultuous', subtheme_id: 29 },
+  { text: 'Resentful', subtheme_id: 29 },
+
+  // Connection (Civilisation > Relationship)
+  { text: 'Kin', subtheme_id: 30 },
+  { text: 'Friend', subtheme_id: 30 },
+  { text: 'Lover', subtheme_id: 30 },
+  { text: 'Spouse', subtheme_id: 30 },
+  { text: 'Supporter', subtheme_id: 30 },
+  { text: 'Ally', subtheme_id: 30 },
+  { text: 'Rival', subtheme_id: 30 },
+  { text: 'Successor', subtheme_id: 30 },
+  { text: 'Mentor', subtheme_id: 30 },
+  { text: 'Peer', subtheme_id: 30 },
+  { text: 'Enemy', subtheme_id: 30 },
+  { text: 'Guardian', subtheme_id: 30 },
+
+  // Theme (Civilisation > Drama)
+  { text: 'Betrayal', subtheme_id: 31 },
+  { text: 'Jealousy', subtheme_id: 31 },
+  { text: 'Rivalry', subtheme_id: 31 },
+  { text: 'Infidelity', subtheme_id: 31 },
+  { text: 'Coup', subtheme_id: 31 },
+  { text: 'Ambition', subtheme_id: 31 },
+  { text: 'Redemption', subtheme_id: 31 },
+  { text: 'Ruin', subtheme_id: 31 },
+  { text: 'Beast', subtheme_id: 31 },
+  { text: 'Dwelling', subtheme_id: 31 },
+  { text: 'Holding', subtheme_id: 31 },
+  { text: 'Bridge', subtheme_id: 31 },
+
+  // Detail (Civilisation > Drama)
+  { text: 'Duel', subtheme_id: 32 },
+  { text: 'Poison', subtheme_id: 32 },
+  { text: 'Oath', subtheme_id: 32 },
+  { text: 'Feast', subtheme_id: 32 },
+  { text: 'Letters', subtheme_id: 32 },
+  { text: 'Disguise', subtheme_id: 32 },
+  { text: 'Inheritance', subtheme_id: 32 },
+  { text: 'Assassin', subtheme_id: 32 },
+  { text: 'Family', subtheme_id: 32 },
+  { text: 'Alcohol', subtheme_id: 32 },
+  { text: 'Blackmail', subtheme_id: 32 },
+  { text: 'Prophecy', subtheme_id: 32 },
+
+  // Description (Civilisation > Crisis)
+  { text: 'Secretive', subtheme_id: 33 },
+  { text: 'Violent', subtheme_id: 33 },
+  { text: 'Looming', subtheme_id: 33 },
+  { text: 'Sudden', subtheme_id: 33 },
+  { text: 'Ongoing', subtheme_id: 33 },
+  { text: 'Foretold', subtheme_id: 33 },
+  { text: 'Mysterious', subtheme_id: 33 },
+  { text: 'Sanctioned', subtheme_id: 33 },
+  { text: 'Unseen', subtheme_id: 33 },
+  { text: 'Vast', subtheme_id: 33 },
+  { text: 'Fake', subtheme_id: 33 },
+  { text: 'Concealed', subtheme_id: 33 },
+
+  // Incident (Civilisation > Crisis)
+  { text: 'Disease', subtheme_id: 34 },
+  { text: 'Famine', subtheme_id: 34 },
+  { text: 'Raids', subtheme_id: 34 },
+  { text: 'Invasion', subtheme_id: 34 },
+  { text: 'Abduction', subtheme_id: 34 },
+  { text: 'Storm', subtheme_id: 34 },
+  { text: 'Fire', subtheme_id: 34 },
+  { text: 'Revolt', subtheme_id: 34 },
+  { text: 'Exodus', subtheme_id: 34 },
+  { text: 'Beast', subtheme_id: 34 },
+  { text: 'Murder', subtheme_id: 34 },
+  { text: 'Theft', subtheme_id: 34 },
+
+  // Action (Civilisation > Task)
+  { text: 'Investigate', subtheme_id: 35 },
+  { text: 'Capture', subtheme_id: 35 },
+  { text: 'Destroy', subtheme_id: 35 },
+  { text: 'Transport', subtheme_id: 35 },
+  { text: 'Retrieve', subtheme_id: 35 },
+  { text: 'Mend', subtheme_id: 35 },
+  { text: 'Break', subtheme_id: 35 },
+  { text: 'Guard', subtheme_id: 35 },
+  { text: 'Aid', subtheme_id: 35 },
+  { text: 'Salvage', subtheme_id: 35 },
+  { text: 'Conceal', subtheme_id: 35 },
+  { text: 'Hunt', subtheme_id: 35 },
+
+  // Subject (Civilisation > Task)
+  { text: 'Knight', subtheme_id: 36 },
+  { text: 'Seer', subtheme_id: 36 },
+  { text: 'Vassals', subtheme_id: 36 },
+  { text: 'Livestock', subtheme_id: 36 },
+  { text: 'Monument', subtheme_id: 36 },
+  { text: 'Gold', subtheme_id: 36 },
+  { text: 'Ruin', subtheme_id: 36 },
+  { text: 'Beast', subtheme_id: 36 },
+  { text: 'Dwelling', subtheme_id: 36 },
+  { text: 'Holding', subtheme_id: 36 },
+  { text: 'Bridge', subtheme_id: 36 },
+  { text: 'Warband', subtheme_id: 36 },
 ];
