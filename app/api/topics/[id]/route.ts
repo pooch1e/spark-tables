@@ -3,6 +3,7 @@ import {
   NotFoundError,
   ValidationError,
   DatabaseError,
+  ConflictError,
 } from '@/app/lib/services/errorHandling';
 import { TopicService } from '@/app/lib/services/topicService';
 export async function GET(
@@ -132,6 +133,20 @@ export async function PUT(
       { status: 200 }
     );
   } catch (err) {
-    console.log(err);
+    if (err instanceof ConflictError) {
+      return Response.json(
+        {
+          success: false,
+          error: err.message,
+        },
+        { status: 409 }
+      );
+    } else if (err instanceof NotFoundError) {
+      throw err;
+    } else if (err instanceof ValidationError) {
+      throw err;
+    } else {
+      throw err;
+    }
   }
 }

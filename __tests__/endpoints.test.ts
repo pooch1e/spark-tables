@@ -444,6 +444,64 @@ describe('Error handling for endpoints', () => {
       });
     });
   });
+  describe('PUT: api/topic/[id]', () => {
+    test('400: returns error for invalid id', async () => {
+      const updateData = { name: 'testName' };
+      await testApiHandler({
+        params: { id: '12kasd 12' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Invalid topic ID');
+        },
+      });
+    });
+    test('404: returns error for non existent topic', async () => {
+      const updateData = { name: 'Test Update' };
+
+      await testApiHandler({
+        params: { id: '99999' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(404);
+          const { error } = await response.json();
+          expect(error).toBe('Topic was not found');
+        },
+      });
+    });
+    test('409: returns error for duplicate name', async () => {
+      const updateData = { name: 'Civilisation' };
+
+      await testApiHandler({
+        params: { id: '2' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Topic name already exists');
+        },
+      });
+    });
+  });
   describe('GET: api/themes/[id]', () => {
     test('400: returns error for non-valid ID', async () => {
       await testApiHandler({

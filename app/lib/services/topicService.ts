@@ -135,10 +135,10 @@ export class TopicService {
         const duplicateCheck = await db
           .select()
           .from(topics)
-          .where(and(eq(topics.name, name), ne(topics.id, id)));
+          .where(eq(topics.name, name));
 
         if (duplicateCheck.length > 0) {
-          throw new Error('Topic name already exists');
+          throw new ConflictError('Topic name already exists');
         }
       }
       //UPDATE TOPIC
