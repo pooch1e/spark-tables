@@ -3,6 +3,7 @@ import {
   NotFoundError,
   ValidationError,
   DatabaseError,
+  ConflictError,
 } from '@/app/lib/services/errorHandling';
 export async function GET(
   request: Request,
@@ -43,6 +44,75 @@ export async function GET(
         { error: 'Internal Database Failure' },
         { status: 500 }
       );
+    }
+  }
+}
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params;
+
+    const numericId: number = Number(id);
+    // validate id
+    if (isNaN(numericId)) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Invalid theme ID',
+        },
+        { status: 400 }
+      );
+    }
+    const body = await request.json();
+    // Validate request body
+    if (!body || Object.keys(body).length === 0) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Request body cannot be empty',
+        },
+        { status: 400 }
+      );
+    }
+    const updatedTheme = await ThemeService.updateThemeByThemeId(
+      numericId,
+      body
+    );
+    if (!updatedTheme) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Topic was not found',
+        },
+        { status: 404 }
+      );
+    }
+
+    return Response.json(
+      {
+        success: true,
+        data: updatedTheme,
+      },
+      { status: 200 }
+    );
+  } catch (err) {
+    if (err instanceof ConflictError) {
+      return Response.json(
+        {
+          success: false,
+          error: err.message,
+        },
+        { status: 409 }
+      );
+    } else if (err instanceof NotFoundError) {
+      throw err;
+    } else if (err instanceof ValidationError) {
+      throw err;
+    } else {
+      throw err;
     }
   }
 }

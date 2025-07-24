@@ -56,6 +56,58 @@ export class ThemeService {
     }
   }
 
+  static async updateThemeByThemeId(
+    id: number,
+    body: { name?: string; description?: string }
+  ) {
+    try {
+      const { name, description } = body;
+
+      // Validation
+      if (name !== undefined && (!name || name.trim() === '')) {
+        throw new Error('Name cannot be empty');
+      }
+
+      const existingTheme = await db
+        .select()
+        .from(themes)
+        .where(eq(themes.id, id));
+      if (existingTheme.length === 0) {
+        return null;
+      }
+
+      const updateData: { name?: string; description?: string } = {};
+      if (name !== undefined) updateData.name = name;
+      if (description !== undefined) updateData.description = description;
+
+      if (Object.keys(updateData).length === 0) {
+        return existingTheme[0];
+      }
+
+      if (name !== undefined) {
+        const duplicateCheck = await db
+          .select()
+          .from(themes)
+          .where(eq(themes.name, name));
+
+        if (duplicateCheck.length > 0) {
+          throw new ConflictError('Theme name already exists');
+        }
+      }
+      //UPDATE THEME
+      const updatedTheme = await db
+        .update(themes)
+        .set(updateData)
+        .where(eq(themes.id, id))
+        .returning();
+
+      const theme = updatedTheme[0];
+      return theme;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async deleteThemeById(id: number) {
     try {
       await db.delete(themes).where(eq(themes.id, id));

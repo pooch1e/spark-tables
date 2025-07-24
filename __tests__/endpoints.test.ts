@@ -344,6 +344,36 @@ describe('testing endpoints', () => {
       });
     });
   });
+  describe('PUT: /api/themes/[id]', () => {
+    test('200: returns updated theme', async () => {
+      const updateData = {
+        name: 'Updated Land Theme',
+        order: 5,
+      };
+
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(200);
+
+          const result = await response.json();
+          const { data } = result;
+
+          expect(data.id).toBe(1);
+          expect(data.name).toBe('Updated Land Theme');
+          expect(data.order).toBe(1);
+          expect(data.topic_id).toBe(1); 
+        },
+      });
+    });
+  });
   describe('DELETE /api/themes/[id]', () => {
     test('200: Theme deleted succesfully', async () => {
       await testApiHandler({
