@@ -80,3 +80,34 @@ export async function DELETE(
     );
   }
 }
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params;
+    const numericId: number = Number(id);
+    // validate id
+    if (isNaN(numericId)) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Invalid topic ID',
+        },
+        { status: 400 }
+      );
+    }
+
+    const updatedTopic = await TopicService.updateTopic();
+    return Response.json(
+      {
+        success: true,
+        data: updatedTopic,
+      },
+      { status: 200 }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+}
