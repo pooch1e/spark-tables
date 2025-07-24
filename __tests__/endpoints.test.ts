@@ -171,6 +171,33 @@ describe('testing endpoints', () => {
     test.todo('handles non-existent topic ID');
     test.todo('handles invalid topic ID');
   });
+  describe('PUT: api/topics/[id]', () => {
+    test('200: returns updated topic', async () => {
+      const updateData = {
+        name: 'Updated Wilderness',
+        description: 'An updated description for wilderness areas',
+      };
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: topicIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+          expect(response.status).toBe(200);
+          const result = await response.json();
+          const { data } = result;
+          expect(data.id).toBe(1);
+          expect(data.name).toBe('Updated Wilderness');
+          expect(data.description).toBe(
+            'An updated description for wilderness areas'
+          );
+        },
+      });
+    });
+  });
   describe('POST: api/topics', () => {
     test('201: returns a newly created topic object with correct properties', async () => {
       const expected = {
