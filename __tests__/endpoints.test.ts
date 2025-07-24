@@ -369,7 +369,7 @@ describe('testing endpoints', () => {
           expect(data.id).toBe(1);
           expect(data.name).toBe('Updated Land Theme');
           expect(data.order).toBe(1);
-          expect(data.topic_id).toBe(1); 
+          expect(data.topic_id).toBe(1);
         },
       });
     });
@@ -554,6 +554,50 @@ describe('Error handling for endpoints', () => {
           const result = await response.json();
           expect(response.status).toBe(404);
           expect(result.error).toBe('Theme was not found');
+        },
+      });
+    });
+  });
+  describe('PUT: api/themes/[id]', () => {
+    test('400: returns error when order is not a number', async () => {
+      const updateData = {
+        name: 'Test Theme',
+        order: 'not-a-number',
+      };
+
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Order must be a number');
+        },
+      });
+    });
+
+    test('409: returns error when updated name already exists', async () => {
+      const updateData = { name: 'Air' }; // Assuming this name already exists
+
+      await testApiHandler({
+        params: { id: '1' },
+        appHandler: themeIdHandler,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData),
+          });
+
+          expect(response.status).toBe(409);
+          const { error } = await response.json();
+          expect(error).toContain('Theme name already exists');
         },
       });
     });
