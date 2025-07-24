@@ -1,6 +1,6 @@
 import { db } from '@/db/connections';
 import { topics, themes, subthemes, descriptors } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and, ne } from 'drizzle-orm';
 import { nestTopicData } from '../utils/nestTopicData';
 import {
   NotFoundError,
@@ -100,6 +100,58 @@ export class TopicService {
         console.error('Database error in Posting Topic:', err);
         throw new DatabaseError('Failed to create topic');
       }
+    }
+  }
+
+  static async updateTopicByTopicId(
+    id: number,
+    body: { name?: string; description?: string }
+  ) {
+    try {
+      const { name, description } = body;
+
+      // Validation
+      if (name !== undefined && (!name || name.trim() === '')) {
+        throw new Error('Name cannot be empty');
+      }
+
+      const existingTopic = await db
+        .select()
+        .from(topics)
+        .where(eq(topics.id, id));
+      if (existingTopic.length === 0) {
+        return null;
+      }
+
+      const updateData: { name?: string; description?: string } = {};
+      if (name !== undefined) updateData.name = name;
+      if (description !== undefined) updateData.description = description;
+
+      if (Object.keys(updateData).length === 0) {
+        return existingTopic[0];
+      }
+
+      if (name !== undefined) {
+        const duplicateCheck = await db
+          .select()
+          .from(topics)
+          .where(and(eq(topics.name, name), ne(topics.id, id)));
+
+        if (duplicateCheck.length > 0) {
+          throw new Error('Topic name already exists');
+        }
+      }
+      //UPDATE TOPIC
+      const updatedTopic = await db
+        .update(topics)
+        .set(updateData)
+        .where(eq(topics.id, id))
+        .returning();
+
+      const topic = updatedTopic[0];
+      return topic;
+    } catch (err) {
+      throw err;
     }
   }
 

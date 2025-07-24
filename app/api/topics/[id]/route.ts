@@ -87,6 +87,7 @@ export async function PUT(
 ) {
   try {
     const { id } = params;
+
     const numericId: number = Number(id);
     // validate id
     if (isNaN(numericId)) {
@@ -98,8 +99,31 @@ export async function PUT(
         { status: 400 }
       );
     }
+    const body = await request.json();
+    // Validate request body
+    if (!body || Object.keys(body).length === 0) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Request body cannot be empty',
+        },
+        { status: 400 }
+      );
+    }
+    const updatedTopic = await TopicService.updateTopicByTopicId(
+      numericId,
+      body
+    );
+    if (!updatedTopic) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Topic was not found',
+        },
+        { status: 404 }
+      );
+    }
 
-    const updatedTopic = await TopicService.updateTopic();
     return Response.json(
       {
         success: true,
