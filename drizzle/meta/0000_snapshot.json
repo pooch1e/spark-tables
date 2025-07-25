@@ -1,5 +1,5 @@
 {
-  "id": "15776506-202e-44f8-a8d7-099e6a31477f",
+  "id": "8e19c369-093e-4020-9190-e2b4744ec119",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -28,7 +28,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "descriptors_subtheme_id_subthemes_id_fk": {
+          "name": "descriptors_subtheme_id_subthemes_id_fk",
+          "tableFrom": "descriptors",
+          "tableTo": "subthemes",
+          "columnsFrom": [
+            "subtheme_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -65,7 +79,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "subthemes_theme_id_themes_id_fk": {
+          "name": "subthemes_theme_id_themes_id_fk",
+          "tableFrom": "subthemes",
+          "tableTo": "themes",
+          "columnsFrom": [
+            "theme_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -94,15 +122,29 @@
           "primaryKey": false,
           "notNull": true
         },
-        "table_id": {
-          "name": "table_id",
+        "topic_id": {
+          "name": "topic_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "themes_topic_id_topics_id_fk": {
+          "name": "themes_topic_id_topics_id_fk",
+          "tableFrom": "themes",
+          "tableTo": "topics",
+          "columnsFrom": [
+            "topic_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
