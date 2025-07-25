@@ -11,20 +11,26 @@ export const themes = pgTable('themes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
-  topic_id: integer('topic_id').notNull(),
+  topic_id: integer('topic_id')
+    .notNull()
+    .references(() => topics.id, { onDelete: 'cascade' }),
 });
 
 export const subthemes = pgTable('subthemes', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   order: integer('order').notNull(),
-  theme_id: integer('theme_id').notNull(),
+  theme_id: integer('theme_id')
+    .notNull()
+    .references(() => themes.id, { onDelete: 'cascade' }),
 });
 
 export const descriptors = pgTable('descriptors', {
   id: serial('id').primaryKey(),
   text: text('text').notNull(),
-  subtheme_id: integer('subtheme_id').notNull(),
+  subtheme_id: integer('subtheme_id')
+    .notNull()
+    .references(() => subthemes.id, { onDelete: 'cascade' }),
 });
 
 // Relations (optional but helpful for joins)
