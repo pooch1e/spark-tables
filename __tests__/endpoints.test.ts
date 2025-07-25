@@ -559,14 +559,11 @@ describe('Error handling for endpoints', () => {
     });
   });
   describe('PUT: api/themes/[id]', () => {
-    test('400: returns error when order is not a number', async () => {
-      const updateData = {
-        name: 'Test Theme',
-        order: 'not-a-number',
-      };
+    test('400: returns error for invalid id', async () => {
+      const updateData = { name: 'testName' };
 
       await testApiHandler({
-        params: { id: '1' },
+        params: { id: '1123jhas' },
         appHandler: themeIdHandler,
         test: async ({ fetch }) => {
           const response = await fetch({
@@ -577,13 +574,13 @@ describe('Error handling for endpoints', () => {
 
           expect(response.status).toBe(400);
           const { error } = await response.json();
-          expect(error).toContain('Order must be a number');
+          expect(error).toContain('Invalid theme ID');
         },
       });
     });
 
     test('409: returns error when updated name already exists', async () => {
-      const updateData = { name: 'Air' }; // Assuming this name already exists
+      const updateData = { name: 'Land' }; 
 
       await testApiHandler({
         params: { id: '1' },
