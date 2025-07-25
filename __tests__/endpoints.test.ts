@@ -406,9 +406,22 @@ describe('testing endpoints', () => {
         },
       });
     });
-    test.todo('handles topic with no themes');
-    test.todo('handles non-existent topic ID');
-    test.todo('handles invalid topic ID');
+
+    test('returns empty array for non existent topic ID', async () => {
+      await testApiHandler({
+        params: { id: '999999' },
+        appHandler: topicHandlerIdAllData,
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
+
+          const result = await response.json();
+          const { data } = result;
+          console.log(data);
+          expect(response.status).toBe(200);
+          expect(data).toHaveLength(0);
+        },
+      });
+    });
   });
 });
 
@@ -580,7 +593,7 @@ describe('Error handling for endpoints', () => {
     });
 
     test('409: returns error when updated name already exists', async () => {
-      const updateData = { name: 'Land' }; 
+      const updateData = { name: 'Land' };
 
       await testApiHandler({
         params: { id: '1' },
@@ -691,6 +704,20 @@ describe('Error handling for endpoints', () => {
       });
     });
   });
+  describe('api/full', () => {
+    test('400: returns error for invalid topic id', async () => {
+      await testApiHandler({
+        params: {id: 'ahjsdh1'},
+        appHandler: topicHandlerIdAllData,
+        test: async ({fetch}) => {
+          const response = await fetch({method: 'GET'})
+          expect(response.status).toBe(400);
+          const { error } = await response.json();
+          expect(error).toContain('Invalid topic ID');
+        }
+      })
+    })
+  })
 });
 
 afterAll(async () => {

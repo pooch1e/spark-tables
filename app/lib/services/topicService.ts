@@ -50,6 +50,9 @@ export class TopicService {
         .leftJoin(themes, eq(themes.topic_id, topics.id))
         .leftJoin(subthemes, eq(subthemes.theme_id, themes.id))
         .leftJoin(descriptors, eq(descriptors.subtheme_id, subthemes.id));
+      if (!result) {
+        throw new NotFoundError('Topic was not found');
+      }
 
       const nestedData = nestTopicData(result);
       return nestedData;
