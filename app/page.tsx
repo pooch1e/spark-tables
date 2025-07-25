@@ -1,7 +1,12 @@
-
+import TopicsTable from './components/topics/FetchTopics';
 
 export default function Home() {
   return (
-    <p>Hello world</p>
+    <>
+      <div className="topic">
+        <p>load topic table serv component</p>
+        <TopicsTable />
+      </div>
+    </>
   );
 }
