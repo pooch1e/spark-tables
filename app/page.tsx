@@ -1,5 +1,10 @@
-
-
 export default function Home() {
-  return <p>Homepage</p>;
+  return (
+    <>
+      <h3 className="p-2.5">Homepage</h3>
+      <div className="topic">
+        <p>load topic table</p>
+      </div>
+    </>
+  );
 }
