@@ -707,17 +707,17 @@ describe('Error handling for endpoints', () => {
   describe('api/full', () => {
     test('400: returns error for invalid topic id', async () => {
       await testApiHandler({
-        params: {id: 'ahjsdh1'},
+        params: { id: 'ahjsdh1' },
         appHandler: topicHandlerIdAllData,
-        test: async ({fetch}) => {
-          const response = await fetch({method: 'GET'})
+        test: async ({ fetch }) => {
+          const response = await fetch({ method: 'GET' });
           expect(response.status).toBe(400);
           const { error } = await response.json();
           expect(error).toContain('Invalid topic ID');
-        }
-      })
-    })
-  })
+        },
+      });
+    });
+  });
 });
 
 afterAll(async () => {
