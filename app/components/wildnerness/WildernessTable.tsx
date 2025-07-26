@@ -11,6 +11,13 @@ export default async function WildernessTable() {
           return (
             <div key={theme.id}>
               <p>{theme.name}</p>
+              {theme.subthemes.map((sub) => {
+                return (
+                  <div key={sub.id}>
+                    <p>{sub.name}</p>
+                  </div>
+                );
+              })}
             </div>
           );
         })}
