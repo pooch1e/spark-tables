@@ -7,7 +7,6 @@ export default function Header() {
         Spark Forge
       </h1>
       <h2>Inspiration Tables</h2>
-      <p>sticky header accross site</p>
     </>
   );
 }
