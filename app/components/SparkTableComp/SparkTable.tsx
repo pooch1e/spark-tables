@@ -1,11 +1,9 @@
-import SparkTableCol from './SparkTableCol';
 import SparkTableHeader from './SparkTableHeader';
 import SparkTableSubthemeHeader from './SparkTableSubThemeHeader';
-import SparkTableThemeHeader from './SparkTableThemeHeader';
 
 export default function SparkTable({ data }) {
-  const wildernessTableData = data[0];
-  const { name, description, themes } = wildernessTableData;
+  const tableData = data[0];
+  const { name, description, themes } = tableData;
   // going to have to iterate over all of this...
 
   // console.log(themes);
