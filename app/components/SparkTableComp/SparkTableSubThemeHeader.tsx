@@ -1,16 +1,15 @@
-export default function SparkTableSubthemeHeader({ subthemes }) {
+import SparkTableCol from './SparkTableCol';
+
+export default function SparkTableSubthemeHeader({ subtheme }) {
   // going to map over data and this will take one of each subtheme in order
-  console.log(subthemes);
-  const subthemeOne = subthemes[0];
-  const subthemeTwo = subthemes[1];
+  // console.log(subtheme);
+
   return (
-    <div>
+    <>
       <div className="col">
-        <p>{subthemeOne.name}</p>
+        <p className="font-semibold">{subtheme.name}</p>
+        <SparkTableCol descriptors={subtheme.descriptors} />
       </div>
-      <div className="col">
-        <p>{subthemeTwo.name}</p>
-      </div>
-    </div>
+    </>
   );
 }

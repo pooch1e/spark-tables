@@ -1,11 +1,10 @@
-export default function SparkTableCol() {
+export default function SparkTableCol({ descriptors }) {
   return (
     <div className="col">
       <ol>
-        <li>description1</li>
-        <li>description2</li>
-        <li>description3</li>
-        <li>description4</li>
+        {descriptors.map((descriptor) => (
+          <li key={descriptor.id}>{descriptor.text}</li>
+        ))}
       </ol>
     </div>
   );
