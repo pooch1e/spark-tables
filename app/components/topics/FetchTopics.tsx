@@ -1,4 +1,5 @@
 import { TopicService } from '@/app/lib/services/topicService';
+import Link from 'next/link';
 
 export default async function TopicsTable() {
   const topics = await TopicService.getAllTopics();
@@ -20,7 +21,7 @@ export default async function TopicsTable() {
           {topics.map((topic) => (
             <tr key={topic.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {topic.name}
+                <Link href={`/${topic.name.toLowerCase()}`}>{topic.name}</Link>
               </td>
               <td className="px-6 py-4 text-sm text-gray-700">
                 {topic.description}

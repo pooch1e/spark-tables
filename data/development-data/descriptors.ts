@@ -333,6 +333,7 @@ export const descriptors = [
   { text: 'Fur', subtheme_id: 24 },
   { text: 'Tapestries', subtheme_id: 24 },
   { text: 'Shields', subtheme_id: 24 },
+  { text: 'Gold', subtheme_id: 24 },
 
   // Appearance (Civilisation > Person)
   { text: 'Delicate', subtheme_id: 25 },
