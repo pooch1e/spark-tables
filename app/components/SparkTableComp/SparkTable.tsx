@@ -15,16 +15,18 @@ export default function SparkTable({ data }) {
         {themes.map((theme) => {
           return (
             <div key={theme.id}>
-              <h3 className="text-lg font-bold mb-2">{theme.name}</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {theme.subthemes.map((subtheme) => {
-                  return (
-                    <SparkTableSubthemeHeader
-                      key={subtheme.id}
-                      subtheme={subtheme}
-                    />
-                  );
-                })}
+              <h3 className="text-lg font-bold mb-2 ml-1">{theme.name}</h3>
+              <div className="">
+                <div className="grid grid-cols-2 gap-4 border-1 p-2">
+                  {theme.subthemes.map((subtheme) => {
+                    return (
+                      <SparkTableSubthemeHeader
+                        key={subtheme.id}
+                        subtheme={subtheme}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );

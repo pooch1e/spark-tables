@@ -7,7 +7,7 @@ export default function SparkTableSubthemeHeader({ subtheme }) {
   return (
     <>
       <div className="col">
-        <p className="font-semibold">{subtheme.name}</p>
+        <p className="font-semibold bg-gray-600 text-white">{subtheme.name}</p>
         <SparkTableCol descriptors={subtheme.descriptors} />
       </div>
     </>
