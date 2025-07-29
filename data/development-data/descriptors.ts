@@ -824,7 +824,7 @@ export const descriptors = [
   { text: 'Fjord', subtheme_id: 59 },
   { text: 'Dunes', subtheme_id: 59 },
 
-  / Maritime → Coast → Character
+  // Maritime → Coast → Character
   { text: 'Treacherous', subtheme_id: 60 },
   { text: 'Serene', subtheme_id: 60 },
   { text: 'Wild', subtheme_id: 60 },
