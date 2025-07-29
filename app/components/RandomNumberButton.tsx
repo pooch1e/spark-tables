@@ -1,9 +1,24 @@
 'use client';
+import { useRouter } from 'next/router';
 import { randomNumGenerator } from '../lib/utils/randomNumGenerator';
+
 export default function RandomNumberButton() {
+  const tableRoutes: Record<number, string> = {
+    1: '/wilderness',
+    2: '/civilisation',
+    3: '/dungeons',
+    4: 'maritime',
+  };
+  const router = useRouter();
   const handleButtonClick = () => {
-    const randomNumber = randomNumGenerator();
-    console.log(randomNumber);
+    const randomNumber: number = randomNumGenerator();
+    const route = tableRoutes[randomNumber];
+
+    if (route) {
+      router.push(route);
+    } else {
+      console.log('error in finding route for random roll');
+    }
   };
   return (
     <div className="p-2 justify-center">
