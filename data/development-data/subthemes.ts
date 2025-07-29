@@ -198,4 +198,202 @@ export const subthemes = [
     order: 2,
     theme_id: 18,
   },
+  // Dungeons → Entrance
+  {
+    name: 'Condition',
+    order: 1,
+    theme_id: 19,
+  },
+  {
+    name: 'Portal',
+    order: 2,
+    theme_id: 19,
+  },
+  // Dungeons → Chamber
+  {
+    name: 'Size',
+    order: 1,
+    theme_id: 20,
+  },
+  {
+    name: 'Purpose',
+    order: 2,
+    theme_id: 20,
+  },
+  // Dungeons → Passage
+  {
+    name: 'Shape',
+    order: 1,
+    theme_id: 21,
+  },
+  {
+    name: 'Feature',
+    order: 2,
+    theme_id: 21,
+  },
+  // Dungeons → Hazard
+  {
+    name: 'Type',
+    order: 1,
+    theme_id: 22,
+  },
+  {
+    name: 'Trigger',
+    order: 2,
+    theme_id: 22,
+  },
+  // Dungeons → Treasure
+  {
+    name: 'Nature',
+    order: 1,
+    theme_id: 23,
+  },
+  {
+    name: 'Form',
+    order: 2,
+    theme_id: 23,
+  },
+  // Dungeons → Guardian
+  {
+    name: 'Demeanor',
+    order: 1,
+    theme_id: 24,
+  },
+  {
+    name: 'Being',
+    order: 2,
+    theme_id: 24,
+  },
+  // Dungeons → Mystery
+  {
+    name: 'Clue',
+    order: 1,
+    theme_id: 25,
+  },
+  {
+    name: 'Secret',
+    order: 2,
+    theme_id: 25,
+  },
+  // Dungeons → Relic
+  {
+    name: 'Power',
+    order: 1,
+    theme_id: 26,
+  },
+  {
+    name: 'Origin',
+    order: 2,
+    theme_id: 26,
+  },
+  // Dungeons → Depths
+  {
+    name: 'Atmosphere',
+    order: 1,
+    theme_id: 27,
+  },
+  {
+    name: 'Phenomenon',
+    order: 2,
+    theme_id: 27,
+  },
+  // Maritime → Vessel
+  {
+    name: 'Type',
+    order: 1,
+    theme_id: 28,
+  },
+  {
+    name: 'Condition',
+    order: 2,
+    theme_id: 28,
+  },
+  // Maritime → Crew
+  {
+    name: 'Skill',
+    order: 1,
+    theme_id: 29,
+  },
+  {
+    name: 'Morale',
+    order: 2,
+    theme_id: 29,
+  },
+  // Maritime → Coast
+  {
+    name: 'Feature',
+    order: 1,
+    theme_id: 30,
+  },
+  {
+    name: 'Character',
+    order: 2,
+    theme_id: 30,
+  },
+  // Maritime → Weather
+  {
+    name: 'Condition',
+    order: 1,
+    theme_id: 31,
+  },
+  {
+    name: 'Intensity',
+    order: 2,
+    theme_id: 31,
+  },
+  // Maritime → Depths
+  {
+    name: 'Mystery',
+    order: 1,
+    theme_id: 32,
+  },
+  {
+    name: 'Creature',
+    order: 2,
+    theme_id: 32,
+  },
+  // Maritime → Island
+  {
+    name: 'Nature',
+    order: 1,
+    theme_id: 33,
+  },
+  {
+    name: 'Feature',
+    order: 2,
+    theme_id: 33,
+  },
+  // Maritime → Harbor
+  {
+    name: 'Activity',
+    order: 1,
+    theme_id: 34,
+  },
+  {
+    name: 'Atmosphere',
+    order: 2,
+    theme_id: 34,
+  },
+  // Maritime → Voyage
+  {
+    name: 'Purpose',
+    order: 1,
+    theme_id: 35,
+  },
+  {
+    name: 'Challenge',
+    order: 2,
+    theme_id: 35,
+  },
+  // Maritime → Legend
+  {
+    name: 'Tale',
+    order: 1,
+    theme_id: 36,
+  },
+  {
+    name: 'Truth',
+    order: 2,
+    theme_id: 36,
+  },
 ];

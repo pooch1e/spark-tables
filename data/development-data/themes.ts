@@ -92,4 +92,96 @@ export const themes = [
     order: 9,
     topic_id: 2,
   },
+  //Dungeons Themes
+  {
+    name: 'Entrance',
+    order: 1,
+    topic_id: 3,
+  },
+  {
+    name: 'Chamber',
+    order: 2,
+    topic_id: 3,
+  },
+  {
+    name: 'Passage',
+    order: 3,
+    topic_id: 3,
+  },
+  {
+    name: 'Hazard',
+    order: 4,
+    topic_id: 3,
+  },
+  {
+    name: 'Treasure',
+    order: 5,
+    topic_id: 3,
+  },
+  {
+    name: 'Guardian',
+    order: 6,
+    topic_id: 3,
+  },
+  {
+    name: 'Mystery',
+    order: 7,
+    topic_id: 3,
+  },
+  {
+    name: 'Relic',
+    order: 8,
+    topic_id: 3,
+  },
+  {
+    name: 'Depths',
+    order: 9,
+    topic_id: 3,
+  },
+  //Maritime Themes
+  {
+    name: 'Vessel',
+    order: 1,
+    topic_id: 4,
+  },
+  {
+    name: 'Crew',
+    order: 2,
+    topic_id: 4,
+  },
+  {
+    name: 'Coast',
+    order: 3,
+    topic_id: 4,
+  },
+  {
+    name: 'Weather',
+    order: 4,
+    topic_id: 4,
+  },
+  {
+    name: 'Depths',
+    order: 5,
+    topic_id: 4,
+  },
+  {
+    name: 'Island',
+    order: 6,
+    topic_id: 4,
+  },
+  {
+    name: 'Harbor',
+    order: 7,
+    topic_id: 4,
+  },
+  {
+    name: 'Voyage',
+    order: 8,
+    topic_id: 4,
+  },
+  {
+    name: 'Legend',
+    order: 9,
+    topic_id: 4,
+  },
 ];
