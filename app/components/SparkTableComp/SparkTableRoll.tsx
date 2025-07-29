@@ -1,8 +1,9 @@
 import { randomNumGenerator } from '@/app/lib/utils/randomNumGenerator';
 export default function SparkTableRoll() {
   const handleButtonClick = () => {
-    const randomNumber: number = randomNumGenerator();
-    
+    const firstDiceRoll: number = randomNumGenerator(9);
+    const secondDiceRoll: number = randomNumGenerator(9);
+
   };
   return (
     <div className="p-2 justify-center">

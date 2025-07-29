@@ -12,7 +12,7 @@ export default function RandomNumberButton() {
   };
 
   const handleButtonClick = () => {
-    const randomNumber: number = randomNumGenerator();
+    const randomNumber: number = randomNumGenerator(4);
     const route = tableRoutes[randomNumber];
 
     if (route) {

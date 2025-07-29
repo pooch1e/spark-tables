@@ -1,4 +1,5 @@
 import SparkTableHeader from './SparkTableHeader';
+import SparkTableRoll from './SparkTableRoll';
 import SparkTableSubthemeHeader from './SparkTableSubThemeHeader';
 import { Themes, Subthemes } from '@/app/types';
 
