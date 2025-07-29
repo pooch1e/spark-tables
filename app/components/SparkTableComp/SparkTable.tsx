@@ -1,5 +1,6 @@
 import SparkTableHeader from './SparkTableHeader';
 import SparkTableSubthemeHeader from './SparkTableSubThemeHeader';
+import { Themes, Subthemes } from '@/app/types';
 
 export default function SparkTable({ data }) {
   const tableData = data[0];
@@ -12,13 +13,13 @@ export default function SparkTable({ data }) {
     <>
       <SparkTableHeader themeName={name} themeDescription={description} />
       <div className="space-y-6">
-        {themes.map((theme) => {
+        {themes.map((theme: Themes) => {
           return (
             <div key={theme.id}>
               <h3 className="text-lg font-bold mb-2 ml-1">{theme.name}</h3>
               <div className="">
                 <div className="grid grid-cols-2 gap-4 border-1 p-2">
-                  {theme.subthemes.map((subtheme) => {
+                  {theme.subthemes.map((subtheme: Subthemes) => {
                     return (
                       <SparkTableSubthemeHeader
                         key={subtheme.id}
