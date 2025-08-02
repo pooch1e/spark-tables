@@ -1,3 +1,4 @@
+'use client';
 import SparkTableHeader from './SparkTableHeader';
 import SparkTableRoll from './SparkTableRoll';
 import SparkTableSubthemeHeader from './SparkTableSubThemeHeader';
@@ -13,6 +14,7 @@ export default function SparkTable({ data }) {
   return (
     <>
       <SparkTableHeader themeName={name} themeDescription={description} />
+      <SparkTableRoll />
       <div className="space-y-6">
         {themes.map((theme: Themes) => {
           return (
