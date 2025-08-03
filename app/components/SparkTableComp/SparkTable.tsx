@@ -1,5 +1,8 @@
+'use client';
 import SparkTableHeader from './SparkTableHeader';
+import SparkTableRoll from './SparkTableRoll';
 import SparkTableSubthemeHeader from './SparkTableSubThemeHeader';
+import { Themes, Subthemes } from '@/app/types';
 
 export default function SparkTable({ data }) {
   const tableData = data[0];
@@ -20,7 +23,7 @@ export default function SparkTable({ data }) {
               </h3>
               <div className="flex-1">
                 <div className="grid grid-cols-2 gap-4 border-1 p-2">
-                  {theme.subthemes.map((subtheme) => {
+                  {theme.subthemes.map((subtheme: Subthemes) => {
                     return (
                       <SparkTableSubthemeHeader
                         key={subtheme.id}

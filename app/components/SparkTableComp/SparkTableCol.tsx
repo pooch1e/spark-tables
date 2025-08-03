@@ -1,8 +1,9 @@
+import { Descriptors } from "@/app/types";
 export default function SparkTableCol({ descriptors }) {
   return (
     <div className="col border-2 p-2">
       <ol className="space-y-0">
-        {descriptors.map((descriptor, index) => (
+        {descriptors.map((descriptor: Descriptors, index: number) => (
           <li
             key={descriptor.id}
             // alternate row bg colour

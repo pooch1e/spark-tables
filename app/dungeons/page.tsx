@@ -7,7 +7,6 @@ export default async function DungeonPage() {
   return (
     <div>
       <SparkTable data={dungeonData} />
-      <p>COMING SOON</p>
     </div>
   );
 }
