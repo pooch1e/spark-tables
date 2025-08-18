@@ -83,6 +83,11 @@ GET /api/topics/[id]/search?q=term # Search within a topic
 - add error handling for themes with no topic id
 - add endpoint.json to track all endpoints, serve up on /api
 
+3d
+- add threejs support service
+- add models for dice roll to choose table
+
+
 # Intergration testing with
 
 https://blog.arcjet.com/testing-next-js-app-router-api-routes/
