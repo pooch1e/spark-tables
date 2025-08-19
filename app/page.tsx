@@ -1,5 +1,6 @@
 import RandomNumberButton from './components/RandomNumberButton';
 import TopicsTable from './components/topics/FetchTopics';
+import { ThreeCanvas } from './World/ThreeCanvas';
 
 export default function Home() {
   return (
@@ -7,6 +8,7 @@ export default function Home() {
       <div className="topic">
         <TopicsTable />
         <RandomNumberButton />
+        <ThreeCanvas />
       </div>
     </>
   );
