@@ -9,14 +9,14 @@ export class ThreeService {
   renderer: THREE.WebGLRenderer;
   dracoLoader: DRACOLoader;
   gltfLoader: GLTFLoader;
+  material: THREE.MeshBasicMaterial;
 
   constructor() {
     //inits
     this.scene = this.addScene();
     this.camera = this.addCamera();
-    
-    this.renderer = this.addRenderer();
-    this.renderer.setSize(innerWidth, innerHeight)
+
+    this.material = this.addMaterial();
 
     //init draco loader
     this.dracoLoader = new DRACOLoader();
@@ -25,6 +25,10 @@ export class ThreeService {
     //init GLTF loader
     this.gltfLoader = new GLTFLoader();
     this.gltfLoader.setDRACOLoader(this.dracoLoader);
+
+    //create renderer
+    this.renderer = this.addRenderer();
+    this.renderer.setSize(innerWidth, innerHeight);
   }
 
   // Method to load standalone DRACO geometry files (.drc)
@@ -98,5 +102,10 @@ export class ThreeService {
   addRenderer() {
     const renderer = new THREE.WebGLRenderer();
     return renderer;
+  }
+
+  addMaterial() {
+    const material = new THREE.MeshBasicMaterial();
+    return material;
   }
 }
