@@ -27,6 +27,9 @@ export class World {
         this.camera,
         this.renderer
       );
+      this.resizer.onResize = () => {
+        this.render();
+      };
     }
 
     // const cube = createCube();

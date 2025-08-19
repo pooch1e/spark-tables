@@ -2,6 +2,7 @@ export class Resizer {
   private container: HTMLElement;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
+  private resizeHandler: () => void;
 
   constructor(
     container: HTMLElement,
@@ -15,8 +16,15 @@ export class Resizer {
     this.setSize();
 
     // Listen for window resize
-    window.addEventListener('resize', this.setSize);
+    window.addEventListener('resize', () => {
+      // set the size again if a resize occurs
+      this.setSize(this.container, this.camera, this.renderer);
+      // perform any custom actions
+      this.onResize();
+    });
   }
+
+  onResize() {}
 
   private setSize = () => {
     const { clientWidth, clientHeight } = this.container;
@@ -31,7 +39,6 @@ export class Resizer {
   };
 
   dispose() {
-    // Clean up the event listener when unmounting
-    window.removeEventListener('resize', this.setSize);
+    window.removeEventListener('resize', this.resizeHandler);
   }
 }
