@@ -1,5 +1,6 @@
 import { createCamera } from './components/camera';
 import { createCube } from './components/cube';
+import { createTetrahedron } from './components/tetrahedron';
 import { createScene } from './components/scene';
 
 import { createRenderer } from './systems/renderer';
@@ -9,7 +10,7 @@ export class World {
   private camera;
   private scene;
   private renderer;
-  private resizer: Resizer;
+  private resizer: any;
   private container: React.RefObject<HTMLCanvasElement>;
   constructor(container: React.RefObject<HTMLCanvasElement>) {
     this.camera = createCamera();
@@ -25,8 +26,10 @@ export class World {
       );
     }
 
-    const cube = createCube();
-    this.scene.add(cube);
+    // const cube = createCube();
+    // this.scene.add(cube);
+    const tetrahedron = createTetrahedron();
+    this.scene.add(tetrahedron);
   }
   //for resizer
   dispose() {
