@@ -1,6 +1,5 @@
-import { WebGLRenderer } from "three"
+import { WebGLRenderer } from 'three';
 
-export const createRenderer = () => {
-  const renderer = new WebGLRenderer();
-  return renderer;
-}
+export const createRenderer = (canvas?: HTMLCanvasElement) => {
+  return new WebGLRenderer({ canvas });
+};
