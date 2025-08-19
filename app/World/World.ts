@@ -1,5 +1,6 @@
 import { createCamera } from './components/camera';
 import { createCube } from './components/cube';
+import { createLights } from './components/lights';
 import { createTetrahedron } from './components/tetrahedron';
 import { createScene } from './components/scene';
 
@@ -18,6 +19,8 @@ export class World {
     this.container = container;
     this.renderer = createRenderer(this.container.current || undefined);
 
+    const light = createLights();
+
     if (this.container.current) {
       this.resizer = new Resizer(
         this.container.current,
@@ -29,7 +32,7 @@ export class World {
     // const cube = createCube();
     // this.scene.add(cube);
     const tetrahedron = createTetrahedron();
-    this.scene.add(tetrahedron);
+    this.scene.add(tetrahedron, light);
   }
   //for resizer
   dispose() {
