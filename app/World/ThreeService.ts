@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
-export class ThreeService {
+export class World {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera | THREE.Camera;
   renderer: THREE.WebGLRenderer;
@@ -11,7 +11,7 @@ export class ThreeService {
   gltfLoader: GLTFLoader;
   material: THREE.MeshBasicMaterial;
 
-  constructor() {
+  constructor(container) {
     //inits
     this.scene = this.addScene();
     this.camera = this.addCamera();
@@ -90,12 +90,12 @@ export class ThreeService {
   }
 
   addCamera() {
-    const perspectiveCamera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    ); //might be canvas height
+    const fov: number = 35; // AKA Field of View
+    const aspect: number = this.container.clientWidth / this.container.clientHeight; //check this for against window
+    const near: number = 0.1; // the near clipping plane
+    const far : number = 100; // the far clipping plane
+    const perspectiveCamera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+
     return perspectiveCamera;
   }
 
@@ -107,5 +107,9 @@ export class ThreeService {
   addMaterial() {
     const material = new THREE.MeshBasicMaterial();
     return material;
+  }
+
+  render() {
+    
   }
 }
