@@ -1,36 +1,58 @@
 'use client';
-import { useRef, useEffect, useState, ReactElement } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { World } from './World';
+
 export const ThreeCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [buttonState, setButtonState] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const worldRef = useRef<World | null>(null);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
-    const world = new World(canvasRef);
-    world.render();
+    if (isRunning && canvasRef.current) {
+      const world = new World(canvasRef);
+      world.start();
+      worldRef.current = world;
 
-    return () => {
-      world.dispose(); // ensures Resizer cleans up listeners
-    };
-  }, [buttonState]);
+      return () => {
+        world.stop();
+        world.dispose();
+        worldRef.current = null;
+      };
+    }
+  }, [isRunning]);
+
+  const handleStop = () => {
+    worldRef.current?.stop();
+    worldRef.current?.dispose();
+    worldRef.current = null;
+    setIsRunning(false);
+  };
 
   return (
-    <div className="div">
-      {!buttonState && (
-        <button
-          className="p-2 bg-blue-500 text-white rounded mb-2"
-          onClick={() => setButtonState(true)}>
-          Start Scene
-        </button>
-      )}
+    <section>
+      <div className="div">
+        {!isRunning && (
+          <button
+            className="p-2 bg-blue-500 text-white rounded mb-2"
+            onClick={() => setIsRunning(true)}>
+            Start Scene
+          </button>
+        )}
 
-      {buttonState && (
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full border border-gray-300"
-        />
-      )}
-    </div>
+        {isRunning && (
+          <div className="flex flex-col items-start">
+            <button
+              className="p-2 bg-red-500 text-white rounded mb-2"
+              onClick={handleStop}>
+              Stop Scene
+            </button>
+            <canvas
+              ref={canvasRef}
+              className="w-full h-full border border-gray-300"
+            />
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
