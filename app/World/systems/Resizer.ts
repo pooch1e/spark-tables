@@ -15,18 +15,19 @@ export class Resizer {
 
     this.setSize();
 
-    // Listen for window resize
-    window.addEventListener('resize', () => {
-      // set the size again if a resize occurs
-      this.setSize(this.container, this.camera, this.renderer);
-      // perform any custom actions
+    this.resizeHandler = () => {
+      this.setSize();
       this.onResize();
-    });
+    };
+
+    window.addEventListener('resize', this.resizeHandler);
   }
 
-  onResize() {}
+  onResize() {
+    // hook for custom behaviour (can be overridden)
+  }
 
-  private setSize = () => {
+  private setSize() {
     const { clientWidth, clientHeight } = this.container;
 
     // update camera aspect
@@ -36,7 +37,7 @@ export class Resizer {
     // update renderer
     this.renderer.setSize(clientWidth, clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-  };
+  }
 
   dispose() {
     window.removeEventListener('resize', this.resizeHandler);

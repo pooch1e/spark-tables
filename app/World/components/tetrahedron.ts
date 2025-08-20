@@ -14,5 +14,13 @@ export const createTetrahedron = () => {
 
   tetrahedron.rotation.set(-0.5, -0.1, 0.8);
 
+  // this method will be called once per frame
+  tetrahedron.tick = () => {
+    // increase the cube's rotation each frame
+    tetrahedron.rotation.z += 0.01;
+    tetrahedron.rotation.x += 0.01;
+    tetrahedron.rotation.y += 0.01;
+  };
+
   return tetrahedron;
 };

@@ -8,7 +8,7 @@ export const ThreeCanvas = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
     const world = new World(canvasRef);
-    world.render();
+    world.start();
 
     return () => {
       world.dispose(); // ensures Resizer cleans up listeners

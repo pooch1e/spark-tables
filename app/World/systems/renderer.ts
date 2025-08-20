@@ -6,5 +6,10 @@ export const createRenderer = (canvas?: HTMLCanvasElement) => {
   // turn on the physically correct lighting model
   renderer.phyiscallCorrectLights = true;
 
+  // start the loop
+  renderer.setAnimationLoop(() => {
+    renderer.render(scene, camera);
+  });
+
   return renderer;
 };
