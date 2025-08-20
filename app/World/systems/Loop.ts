@@ -21,11 +21,11 @@ export class Loop {
   stop() {
     this.renderer.setAnimationLoop(null);
   }
-
+  // tick clock instead of fps
   tick() {
     const delta = clock.getDelta();
     for (const object of this.updatables) {
-      object.tick();
+      object.tick(delta);
     }
   }
 }

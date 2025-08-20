@@ -36,18 +36,18 @@ export class World {
     // const cube = createCube();
     // this.scene.add(cube);
     const tetrahedron = createTetrahedron();
-    this.loop.updatables.push(tetrahedron)
+    this.loop.updatables.push(tetrahedron, this.camera);
     this.scene.add(tetrahedron, light);
   }
   //for resizer
   dispose() {
     this.resizer?.dispose();
   }
-
+  //produce single frame
   render() {
     this.renderer.render(this.scene, this.camera);
   }
-
+  // animated loop
   start() {
     this.loop.start();
   }
