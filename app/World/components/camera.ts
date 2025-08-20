@@ -12,8 +12,15 @@ export const createCamera = () => {
   camera.position.set(0, 0, 10);
 
   // animate camera position on tick
+  const speed = 2; // units per second
+  const maxZ = 20;
+  const minZ = 5;
+
   camera.tick = (delta) => {
-    camera.position.z += radiansPerSecond * delta;
+    camera.position.z += speed * delta;
+    if (camera.position.z > maxZ) {
+      camera.position.z = minZ;
+    }
   };
 
   return camera;
