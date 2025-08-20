@@ -39,6 +39,10 @@ export class World {
     this.loop.updatables.push(tetrahedron, this.camera);
     this.scene.add(tetrahedron, directionalLight, ambientLight);
   }
+
+  async init() {
+    
+  }
   //for resizer
   dispose() {
     this.resizer?.dispose();
