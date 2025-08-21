@@ -10,7 +10,8 @@ export const ThreeCanvas = () => {
   useEffect(() => {
     if (isRunning && canvasRef.current) {
       const world = new World(canvasRef);
-      world.start();
+      world.init();
+      world.start(); //animation
       worldRef.current = world;
 
       return () => {

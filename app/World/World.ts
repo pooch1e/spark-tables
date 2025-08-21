@@ -7,6 +7,8 @@ import { createScene } from './components/scene';
 import { createRenderer } from './systems/renderer';
 import { Resizer } from './systems/Resizer';
 import { Loop } from './systems/Loop';
+import { ModelLoader } from './systems/GLTFloader';
+import { createMaterial } from './components/material';
 
 export class World {
   private camera;
@@ -35,9 +37,28 @@ export class World {
 
     // const cube = createCube();
     // this.scene.add(cube);
-    const tetrahedron = createTetrahedron();
-    this.loop.updatables.push(tetrahedron, this.camera);
-    this.scene.add(tetrahedron, directionalLight, ambientLight);
+    // const tetrahedron = createTetrahedron();
+    // this.loop.updatables.push(tetrahedron, this.camera);
+    // this.scene.add(tetrahedron, directionalLight, ambientLight);
+
+    //removing test tetrehedron
+    this.loop.updatables.push(this.camera);
+    this.scene.add(directionalLight, ambientLight);
+  }
+
+  async init() {
+    const loader = new ModelLoader();
+    const data = await loader.load('/models/4_sided_dice.glb');
+    const dice = loader.setupModel(data);
+    const material = createMaterial();
+
+    this.scene.add(dice);
+    dice.position.set(-5, -5, 0);
+    dice.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = material;
+      }
+    });
   }
   //for resizer
   dispose() {
