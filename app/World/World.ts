@@ -1,9 +1,9 @@
 import { createCamera } from './components/camera';
 
 import { createLights } from './components/lights';
-import { createTetrahedron } from './components/tetrahedron';
-import { createScene } from './components/scene';
 
+import { createScene } from './components/scene';
+import { createAxesHelper } from './components/helpers/axesHelper';
 import { createRenderer } from './systems/renderer';
 import { Resizer } from './systems/Resizer';
 import { Loop } from './systems/Loop';
@@ -35,15 +35,12 @@ export class World {
       );
     }
 
-    // const cube = createCube();
-    // this.scene.add(cube);
-    // const tetrahedron = createTetrahedron();
-    // this.loop.updatables.push(tetrahedron, this.camera);
-    // this.scene.add(tetrahedron, directionalLight, ambientLight);
+    // ADD AXES HELPER
+    const axesHelper = createAxesHelper();
 
     //removing test tetrehedron
     // this.loop.updatables.push(this.camera);
-    this.scene.add(directionalLight, ambientLight);
+    this.scene.add(directionalLight, ambientLight, axesHelper);
   }
 
   async init() {
@@ -53,7 +50,8 @@ export class World {
     const material = createMaterial();
 
     this.scene.add(dice);
-    dice.position.set(-5, -5, 0);
+    dice.position.set(-10, -10, -10);
+    
     dice.traverse((child: any) => {
       if (child.isMesh) {
         child.material = material;
