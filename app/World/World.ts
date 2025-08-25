@@ -70,48 +70,49 @@ export class World {
     const dice = loader.setupModel(data);
     const material = createMaterial();
 
-    const box = new THREE.Box3().setFromObject(dice);
-    const center = box.getCenter(new THREE.Vector3());
-    dice.position.sub(center); // recenters geometry around (0,0,0)
+    this.setupDiceMesh(dice, material, 2);
 
-    this.diceMesh = dice;
+    this.physics.start();
+  }
 
+  private setupDiceMesh(
+    dice: THREE.Object3D,
+    material: THREE.Material,
+    physicsSize = 2
+  ) {
     dice.traverse((child: any) => {
       if (child.isMesh) {
         child.material = material;
       }
     });
 
-    // Get the physics body from physics world
-    const bodies = this.physics.getBodies();
+    // --- 2. Recenter pivot so rotation matches Cannon's center of mass
+    const box = new THREE.Box3().setFromObject(dice);
+    const center = box.getCenter(new THREE.Vector3());
+    dice.position.sub(center);
+    dice.rotation.set(Math.PI / 2, 2, 0);
+    // --- 3. Scale mesh to match physics dimensions
+    const visualSize = box.getSize(new THREE.Vector3());
+    const scale = physicsSize / visualSize.length();
+    dice.scale.setScalar(scale);
 
-    // Find the tetrahedron body (not the ground plane)
+    // --- 4. Match with physics body
+    const bodies = this.physics.getBodies();
     this.diceBody = bodies.find((body) => body.mass > 0);
 
-    if (this.diceBody && this.diceMesh) {
-      // Position visual dice to match physics body
-      this.diceMesh.position.copy(this.diceBody.position);
-      this.diceMesh.quaternion.copy(this.diceBody.quaternion);
-
-      // Scale the visual model to match physics if needed
-      // Adjust this scale factor to match your model size with physics
-      // this.diceMesh.scale.setScalar(0.7); // Adjust this value as needed
-
-      //dice model size
-      const physicsSize = 2; // diameter of physics tetrahedron
-      const visualSize = new THREE.Box3()
-        .setFromObject(dice)
-        .getSize(new THREE.Vector3());
-
-      // Pick a uniform scale factor
-      const scale = physicsSize / visualSize.length();
-      dice.scale.setScalar(scale);
-
-      this.scene.add(dice);
-      dice.position.set(0, 0, 0); //may have to adjust this to match physics
-
-      this.physics.start();
+    if (this.diceBody) {
+      // Place mesh at body’s position & rotation
+      dice.position.copy(this.diceBody.position as unknown as THREE.Vector3);
+      dice.quaternion.copy(
+        this.diceBody.quaternion as unknown as THREE.Quaternion
+      );
     }
+
+    // --- 5. Store reference & add to scene
+    this.diceMesh = dice;
+    this.scene.add(dice);
+
+    return dice;
   }
 
   // Update method to sync visual dice with physics
