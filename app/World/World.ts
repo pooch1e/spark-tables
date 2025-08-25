@@ -62,7 +62,7 @@ export class World {
   }
 
   async init() {
-    this.physics.init(true); //init physics
+    await this.physics.init(true); //init physics
 
     //load dice
     const loader = new ModelLoader();
@@ -86,33 +86,42 @@ export class World {
       }
     });
 
-    // --- 2. Recenter pivot so rotation matches Cannon's center of mass
+    // --- Better pivot recentering approach
     const box = new THREE.Box3().setFromObject(dice);
+    const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
-    dice.position.sub(center);
-    dice.rotation.set(Math.PI / 2, 2, 0);
-    // --- 3. Scale mesh to match physics dimensions
-    const visualSize = box.getSize(new THREE.Vector3());
-    const scale = physicsSize / visualSize.length();
-    dice.scale.setScalar(scale);
 
-    // --- 4. Match with physics body
+    // Create a group to hold the dice for better pivot control
+    const diceGroup = new THREE.Group();
+
+    // Center the dice within the group
+    dice.position.sub(center);
+    diceGroup.add(dice);
+
+    // Scale to match physics size
+    const maxDimension = Math.max(size.x, size.y, size.z);
+    const scale = physicsSize / maxDimension;
+    diceGroup.scale.setScalar(scale);
+
+    // --- Get physics body
     const bodies = this.physics.getBodies();
     this.diceBody = bodies.find((body) => body.mass > 0);
 
     if (this.diceBody) {
-      // Place mesh at body’s position & rotation
-      dice.position.copy(this.diceBody.position as unknown as THREE.Vector3);
-      dice.quaternion.copy(
+      // Sync initial position and rotation
+      diceGroup.position.copy(
+        this.diceBody.position as unknown as THREE.Vector3
+      );
+      diceGroup.quaternion.copy(
         this.diceBody.quaternion as unknown as THREE.Quaternion
       );
     }
 
-    // --- 5. Store reference & add to scene
-    this.diceMesh = dice;
-    this.scene.add(dice);
+    // --- Store reference & add to scene
+    this.diceMesh = diceGroup;
+    this.scene.add(diceGroup);
 
-    return dice;
+    return diceGroup;
   }
 
   // Update method to sync visual dice with physics
