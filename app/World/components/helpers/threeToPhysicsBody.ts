@@ -1,76 +1,101 @@
-import { ModelLoader } from '../../systems/GLTFloader';
-import CANNON from 'cannon-es';
+import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
-import { threeToCannon } from 'three-to-cannon';
+import { createSimpleTetrahedron } from '../../physics/components/createTetrehedronBody';
+
 export const createBodyFromModel = async (
   targetHeight: number = 2
 ): Promise<CANNON.Body> => {
+  console.log('Creating D4 physics body with target height:', targetHeight);
+
+  // For a D4 dice, we want to force a tetrahedron shape regardless of the model
+  // The visual model can be complex, but physics should be a simple tetrahedron
+  return createPerfectTetrahedron(targetHeight);
+};
+
+// Create a perfect tetrahedron for D4 physics
+const createPerfectTetrahedron = (size: number): CANNON.Body => {
+  console.log('Creating perfect tetrahedron for D4 with size:', size);
+
+  // Perfect regular tetrahedron vertices
+  // This creates a tetrahedron that sits properly (one face on ground)
+  const h = size * 0.8165; // Height of tetrahedron = edge * sqrt(2/3)
+  const r = size * 0.5774; // Circumradius = edge * sqrt(6)/4
+
+  const vertices = [
+    // Bottom face vertices (equilateral triangle)
+    new CANNON.Vec3(r, 0, r / Math.sqrt(3)), // Front vertex
+    new CANNON.Vec3(-r, 0, r / Math.sqrt(3)), // Left vertex
+    new CANNON.Vec3(0, 0, (-2 * r) / Math.sqrt(3)), // Back vertex
+    // Top vertex
+    new CANNON.Vec3(0, h, 0), // Apex
+  ];
+
+  // Faces with correct winding (counter-clockwise from outside)
+  const faces = [
+    [0, 1, 3], // Front face
+    [1, 2, 3], // Left face
+    [2, 0, 3], // Right face
+    [0, 2, 1], // Bottom face (reversed for correct normal)
+  ];
+
+  console.log('Perfect tetrahedron vertices:', vertices);
+
   try {
-    const loader = new ModelLoader();
-    const data = await loader.load('/models/4_sided_dice.glb');
-    const dice = loader.setupModel(data);
+    const shape = new CANNON.ConvexPolyhedron({ vertices, faces });
 
-    // Get the actual height of the model
-    const box = new THREE.Box3().setFromObject(dice);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-
-    const modelHeight = size.y; // Height of the pyramid
-    const scaleFactor = targetHeight / modelHeight;
-
-    // Convert and scale
-    const result = threeToCannon(dice);
-
-    if (!result || !result.shape) {
-      throw new Error('Failed to convert model to physics shape');
-    }
-
-    // Scale the physics shape vertices
-    if (result.shape instanceof CANNON.ConvexPolyhedron) {
-      result.shape.vertices.forEach((vertex) => {
-        vertex.x *= scaleFactor;
-        vertex.y *= scaleFactor;
-        vertex.z *= scaleFactor;
-      });
-      result.shape.updateNormals();
-      result.shape.updateBoundingSphereRadius();
-    }
-
-    const diceBody = new CANNON.Body({
+    const body = new CANNON.Body({
       mass: 5,
-      shape: result.shape,
+      shape: shape,
       position: new CANNON.Vec3(0, 10, 0),
     });
 
-    return diceBody;
-  } catch (err) {
-    console.error('Error with three-to-cannon, using manual tetrahedron:', err);
-    return createManualTetrahedronBody(2);
+    console.log('Successfully created perfect tetrahedron physics body');
+    return body;
+  } catch (error) {
+    console.error('Perfect tetrahedron failed:', error);
+    return createSimpleTetrahedron(size);
   }
 };
 
-const createManualTetrahedronBody = (height: number): CANNON.Body => {
-  const halfHeight = height / 2;
-  const baseRadius = height / Math.sqrt(3); // For equilateral triangle base
+// Alternative: Create from regular tetrahedron geometry
+export const createTetrahedronFromGeometry = (
+  size: number = 2
+): CANNON.Body => {
+  // Create Three.js tetrahedron geometry
+  const geometry = new THREE.TetrahedronGeometry(size, 0);
 
-  const vertices = [
-    new CANNON.Vec3(0, halfHeight, 0), // Apex
-    new CANNON.Vec3(0, -halfHeight / 3, (2 * baseRadius) / 3), // Base vertex 1
-    new CANNON.Vec3(-baseRadius, -halfHeight / 3, -baseRadius / 3), // Base vertex 2
-    new CANNON.Vec3(baseRadius, -halfHeight / 3, -baseRadius / 3), // Base vertex 3
-  ];
+  // Extract vertices and faces
+  const vertices: CANNON.Vec3[] = [];
+  const faces: number[][] = [];
 
-  const faces = [
-    [0, 2, 1], // Face A-B-C
-    [0, 3, 2], // Face A-D-B
-    [0, 1, 3], // Face A-C-D
-    [1, 2, 3], // Base face C-B-D
-  ];
+  // Get vertices from geometry
+  const positions = geometry.attributes.position.array;
+  for (let i = 0; i < positions.length; i += 3) {
+    vertices.push(
+      new CANNON.Vec3(positions[i], positions[i + 1], positions[i + 2])
+    );
+  }
+
+  // Get faces from geometry indices
+  if (geometry.index) {
+    const indices = geometry.index.array;
+    for (let i = 0; i < indices.length; i += 3) {
+      faces.push([indices[i], indices[i + 1], indices[i + 2]]);
+    }
+  }
+
+  console.log(
+    'Tetrahedron from geometry - vertices:',
+    vertices.length,
+    'faces:',
+    faces.length
+  );
 
   const shape = new CANNON.ConvexPolyhedron({ vertices, faces });
 
   return new CANNON.Body({
     mass: 5,
     shape: shape,
+    position: new CANNON.Vec3(0, 10, 0),
   });
 };

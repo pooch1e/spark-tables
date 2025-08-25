@@ -1,7 +1,5 @@
 import { createCamera } from './components/camera';
-
 import { createLights } from './components/lights';
-
 import { createScene } from './components/scene';
 import { createAxesHelper } from './components/helpers/axesHelper';
 import { createRenderer } from './systems/renderer';
@@ -26,6 +24,7 @@ export class World {
   private physics: PhysicsWorld;
   private diceMesh: THREE.Object3D | null = null;
   private diceBody: any = null;
+  private targetSize = 2; // Consistent size for both visual and physics
 
   constructor(container: React.RefObject<HTMLCanvasElement>) {
     this.camera = createCamera();
@@ -51,8 +50,6 @@ export class World {
     // ADD AXES HELPER
     const axesHelper = createAxesHelper();
 
-    //removing test tetrehedron
-    // this.loop.updatables.push(this.camera);
     this.scene.add(directionalLight, ambientLight, axesHelper);
 
     // Add physics update to the render loop
@@ -62,66 +59,101 @@ export class World {
   }
 
   async init() {
-    await this.physics.init(true); //init physics
+    await this.physics.init(true); // init physics
 
-    //load dice
-    const loader = new ModelLoader();
-    const data = await loader.load('/models/4_sided_dice.glb');
-    const dice = loader.setupModel(data);
-    const material = createMaterial();
+    // Get the physics body that was created
+    const bodies = this.physics.getBodies();
+    this.diceBody = bodies.find((body) => body.mass > 0);
 
-    this.setupDiceMesh(dice, material, 2);
+    if (!this.diceBody) {
+      console.error('No physics body found!');
+      return;
+    }
+
+    // Load and setup the visual mesh
+    await this.loadAndSetupVisualDice();
 
     this.physics.start();
   }
 
-  private setupDiceMesh(
-    dice: THREE.Object3D,
-    material: THREE.Material,
-    physicsSize = 2
-  ) {
-    dice.traverse((child: any) => {
-      if (child.isMesh) {
-        child.material = material;
+  private async loadAndSetupVisualDice() {
+    try {
+      // Load dice model
+      const loader = new ModelLoader();
+      const data = await loader.load('/models/4_sided_dice.glb');
+      const dice = loader.setupModel(data);
+      const material = createMaterial();
+
+      // Apply material to all meshes
+      dice.traverse((child: any) => {
+        if (child.isMesh) {
+          child.material = material;
+        }
+      });
+
+      // Get model dimensions
+      const box = new THREE.Box3().setFromObject(dice);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      // Create a group for better control
+      const diceGroup = new THREE.Group();
+
+      // Center the dice within the group
+      dice.position.sub(center);
+
+      // Rotate the dice to match physics orientation (adjust as needed)
+      dice.rotation.x = Math.PI /2; 
+      dice.rotation.y = Math.PI /4; 
+      dice.rotation.z = 0; 
+
+      diceGroup.add(dice);
+
+      // Scale to match the SAME size as physics body
+      const maxDimension = Math.max(size.x, size.y, size.z);
+      const scale = this.targetSize / maxDimension;
+      diceGroup.scale.setScalar(scale);
+
+      console.log('Visual dice scale:', scale, 'Target size:', this.targetSize);
+
+      // Sync initial position and rotation with physics body
+      if (this.diceBody) {
+        diceGroup.position.copy(
+          this.diceBody.position as unknown as THREE.Vector3
+        );
+        diceGroup.quaternion.copy(
+          this.diceBody.quaternion as unknown as THREE.Quaternion
+        );
       }
-    });
 
-    // --- Better pivot recentering approach
-    const box = new THREE.Box3().setFromObject(dice);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
+      // Store reference & add to scene
+      this.diceMesh = diceGroup;
+      this.scene.add(diceGroup);
 
-    // Create a group to hold the dice for better pivot control
-    const diceGroup = new THREE.Group();
+      return diceGroup;
+    } catch (error) {
+      console.error('Failed to load visual dice:', error);
+      // Create a simple visual fallback
+      this.createVisualFallback();
+    }
+  }
 
-    // Center the dice within the group
-    dice.position.sub(center);
-    diceGroup.add(dice);
-
-    // Scale to match physics size
-    const maxDimension = Math.max(size.x, size.y, size.z);
-    const scale = physicsSize / maxDimension;
-    diceGroup.scale.setScalar(scale);
-
-    // --- Get physics body
-    const bodies = this.physics.getBodies();
-    this.diceBody = bodies.find((body) => body.mass > 0);
+  private createVisualFallback() {
+    // Create a visual tetrahedron as fallback
+    const geometry = new THREE.TetrahedronGeometry(this.targetSize / 2, 0);
+    const material = createMaterial();
+    const mesh = new THREE.Mesh(geometry, material);
 
     if (this.diceBody) {
-      // Sync initial position and rotation
-      diceGroup.position.copy(
-        this.diceBody.position as unknown as THREE.Vector3
-      );
-      diceGroup.quaternion.copy(
+      mesh.position.copy(this.diceBody.position as unknown as THREE.Vector3);
+      mesh.quaternion.copy(
         this.diceBody.quaternion as unknown as THREE.Quaternion
       );
     }
 
-    // --- Store reference & add to scene
-    this.diceMesh = diceGroup;
-    this.scene.add(diceGroup);
-
-    return diceGroup;
+    this.diceMesh = mesh;
+    this.scene.add(mesh);
+    console.log('Created visual fallback tetrahedron');
   }
 
   // Update method to sync visual dice with physics
@@ -137,6 +169,7 @@ export class World {
       this.physics.cannonDebugger.update();
     }
   }
+
   // Method to roll the dice again
   rollDice() {
     if (this.diceBody) {
@@ -149,13 +182,14 @@ export class World {
 
       // Reset velocity
       this.diceBody.velocity.set(0, 0, 0);
+      this.diceBody.angularVelocity.set(0, 0, 0);
 
       // Add random angular velocity for spinning
-      // this.diceBody.angularVelocity.set(
-      //   Math.random() * 10 - 5,
-      //   Math.random() * 10 - 5,
-      //   Math.random() * 10 - 5
-      // );
+      this.diceBody.angularVelocity.set(
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5
+      );
     }
   }
 
@@ -172,14 +206,17 @@ export class World {
       this.diceMesh.scale.setScalar(scale);
     }
   }
+
   //for resizer
   dispose() {
     this.resizer?.dispose();
   }
+
   //produce single frame
   render() {
     this.renderer.render(this.scene, this.camera);
   }
+
   // animated loop
   start() {
     this.loop.start();
@@ -200,5 +237,9 @@ export class World {
 
   getDiceBody() {
     return this.diceBody;
+  }
+
+  getTargetSize() {
+    return this.targetSize;
   }
 }
