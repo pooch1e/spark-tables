@@ -20,6 +20,8 @@
     "test:watch": "NODE_ENV=test jest --watch"
   },
   "dependencies": {
+    "cannon-es": "^0.20.0",
+    "cannon-es-debugger": "^1.0.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.3",
@@ -37,6 +39,7 @@
     "@eslint/eslintrc": "^3",
     "@jest/types": "^30.0.1",
     "@tailwindcss/postcss": "^4",
+    "@types/cannon": "^0.1.13",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.9",
     "@types/pg": "^8.15.4",

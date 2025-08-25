@@ -11,10 +11,34 @@ export const ThreeCanvas = () => {
     if (isRunning && canvasRef.current) {
       const world = new World(canvasRef);
       world.init();
-      world.start(); //animation
+      world.start();
       worldRef.current = world;
 
+      
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (!worldRef.current) return;
+
+        switch (event.code) {
+          case 'KeyR':
+            worldRef.current.rollDice();
+            break;
+          case 'KeyD':
+            worldRef.current.toggleDebugWireframes();
+            break;
+          case 'Equal': // "+" key (Shift + "=" on most keyboards)
+            worldRef.current.scaleDice(1.1);
+            break;
+          case 'Minus':
+            worldRef.current.scaleDice(0.9);
+            break;
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+
       return () => {
+        // cleanup
+        document.removeEventListener('keydown', handleKeyDown);
         world.stop();
         world.dispose();
         worldRef.current = null;
