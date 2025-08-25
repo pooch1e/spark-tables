@@ -42,7 +42,7 @@ export class World {
     // this.scene.add(tetrahedron, directionalLight, ambientLight);
 
     //removing test tetrehedron
-    this.loop.updatables.push(this.camera);
+    // this.loop.updatables.push(this.camera);
     this.scene.add(directionalLight, ambientLight);
   }
 
