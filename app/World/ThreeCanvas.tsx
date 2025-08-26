@@ -11,10 +11,13 @@ export const ThreeCanvas = () => {
     if (isRunning && canvasRef.current) {
       const world = new World(canvasRef);
       world.init();
-      world.start(); //animation
+      world.start();
       worldRef.current = world;
+      world.rollDice();
 
       return () => {
+        // cleanup
+
         world.stop();
         world.dispose();
         worldRef.current = null;
@@ -46,6 +49,9 @@ export const ThreeCanvas = () => {
               className="p-2 bg-red-500 text-white rounded mb-2"
               onClick={handleStop}>
               Stop Scene
+            </button>
+            <button onClick={() => worldRef.current?.toggleDebugWireframes()}>
+              Toggle Debug
             </button>
             <canvas
               ref={canvasRef}
