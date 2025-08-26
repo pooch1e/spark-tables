@@ -12,6 +12,7 @@ export class PhysicsWorld {
   private timeStep: number = 1 / 60;
   private lastCallTime: number = 0;
   public cannonDebugger: any;
+  private debugEnabled = true;
   private targetSize = 2; // Consistent with World class
 
   constructor(scene: THREE.Scene) {
@@ -19,13 +20,9 @@ export class PhysicsWorld {
     this.scene = scene;
   }
 
-  async init(showDebugWireframes: boolean = true) {
+  async init() {
     // Set gravity
     this.world.gravity.set(0, -9.82, 0);
-
-    // Add solver settings for better stability
-    this.world.solver.iterations = 10;
-    this.world.solver.tolerance = 0.0001;
 
     // Enable contact material
     this.world.defaultContactMaterial.friction = 0.4;
@@ -36,17 +33,26 @@ export class PhysicsWorld {
 
     // Add dice body to world - wait for it to be created
     const diceBody = await this.addBody();
+
+    //add inital velocity and angles
+    diceBody.quaternion.setFromEuler(
+      Math.random() * Math.PI,
+      Math.random() * Math.PI,
+      Math.random() * Math.PI
+    );
+    diceBody.velocity.set(
+      (Math.random() - 0.5) * 5,
+      8,
+      (Math.random() - 0.5) * 5
+    );
+    diceBody.angularVelocity.set(
+      (Math.random() - 0.5) * 10,
+      (Math.random() - 0.5) * 10,
+      (Math.random() - 0.5) * 10
+    );
     this.world.addBody(diceBody);
 
     console.log('Added dice body to physics world:', diceBody);
-
-    // Set up debug renderer if requested
-    if (showDebugWireframes) {
-      this.cannonDebugger = new CannonDebugger(this.scene, this.world, {
-        color: 0x00ff00,
-        scale: 1.0,
-      });
-    }
   }
 
   private addGround() {
@@ -56,7 +62,7 @@ export class PhysicsWorld {
       shape: groundShape,
     });
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
-    groundBody.position.set(0, 0, 0);
+    groundBody.position.set(0, -5, 0);
 
     // Add ground material properties
     const groundMaterial = new CANNON.Material('ground');
@@ -133,15 +139,13 @@ export class PhysicsWorld {
     this.lastCallTime = time;
     this.world.fixedStep(this.timeStep, deltaTime);
 
-    if (this.cannonDebugger) {
+    if (this.cannonDebugger && this.debugEnabled) {
       this.cannonDebugger.update();
     }
   };
 
   toggleDebugRenderer() {
-    if (this.cannonDebugger) {
-      this.cannonDebugger.enabled = !this.cannonDebugger.enabled;
-    }
+    this.debugEnabled = !this.debugEnabled;
   }
 
   start() {

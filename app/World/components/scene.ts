@@ -1,6 +1,6 @@
 import { Color, Scene } from 'three';
 export const createScene = () => {
   const scene = new Scene();
-  scene.background = new Color('black');
+  scene.background = new Color('red');
   return scene;
 };

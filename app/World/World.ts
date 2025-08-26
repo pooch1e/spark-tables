@@ -48,9 +48,9 @@ export class World {
     }
 
     // ADD AXES HELPER
-    const axesHelper = createAxesHelper();
+    // const axesHelper = createAxesHelper();
 
-    this.scene.add(directionalLight, ambientLight, axesHelper);
+    this.scene.add(directionalLight, ambientLight);
 
     // Add physics update to the render loop
     this.loop.updatables.push({
@@ -102,11 +102,7 @@ export class World {
       // Center the dice within the group
       dice.position.sub(center);
 
-      // Rotate the dice to match physics orientation (adjust as needed)
-      // dice.rotation.x = Math.PI /2;
-      // dice.rotation.y = Math.PI /4;
-      // dice.rotation.z = 0;
-
+      //place model inside physics body
       dice.position.y = 1;
 
       diceGroup.add(dice);
@@ -156,6 +152,8 @@ export class World {
     this.diceMesh = mesh;
     this.scene.add(mesh);
     console.log('Created visual fallback tetrahedron');
+    // turn off debugger
+    this.physics.cannonDebugger.showDebugWireframes(); //this not working
   }
 
   // Update method to sync visual dice with physics

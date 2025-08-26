@@ -13,32 +13,11 @@ export const ThreeCanvas = () => {
       world.init();
       world.start();
       worldRef.current = world;
-
-      
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (!worldRef.current) return;
-
-        switch (event.code) {
-          case 'KeyR':
-            worldRef.current.rollDice();
-            break;
-          case 'KeyD':
-            worldRef.current.toggleDebugWireframes();
-            break;
-          case 'Equal': // "+" key (Shift + "=" on most keyboards)
-            worldRef.current.scaleDice(1.1);
-            break;
-          case 'Minus':
-            worldRef.current.scaleDice(0.9);
-            break;
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
+      world.rollDice();
 
       return () => {
         // cleanup
-        document.removeEventListener('keydown', handleKeyDown);
+
         world.stop();
         world.dispose();
         worldRef.current = null;
@@ -70,6 +49,9 @@ export const ThreeCanvas = () => {
               className="p-2 bg-red-500 text-white rounded mb-2"
               onClick={handleStop}>
               Stop Scene
+            </button>
+            <button onClick={() => worldRef.current?.toggleDebugWireframes()}>
+              Toggle Debug
             </button>
             <canvas
               ref={canvasRef}
