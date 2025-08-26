@@ -105,9 +105,6 @@ export class World {
       // Center the dice within the group
       dice.position.sub(center);
 
-      //place model inside physics body
-      dice.position.y = 1;
-
       diceGroup.add(dice);
 
       // Scale to match the SAME size as physics body
@@ -166,13 +163,15 @@ export class World {
       this.diceMesh.position.copy(this.diceBody.position);
       this.diceMesh.quaternion.copy(this.diceBody.quaternion);
       //camera follows dice
-      // this.camera.lookAt(this.diceMesh.position);
+      this.camera.lookAt(this.diceMesh.position);
     }
 
     // Update physics debug renderer
     if (this.physics.cannonDebugger) {
       this.physics.cannonDebugger.update();
     }
+
+    this.physics.toggleDebugRenderer();
   }
 
   // Method to roll the dice again

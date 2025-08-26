@@ -9,7 +9,7 @@ export const createCamera = () => {
   );
 
   // move the camera back so we can view the scene
-  camera.position.set(0, 0, 10);
+  camera.position.set(0, 0, 13);
 
   // animate camera position on tick
   // const speed = 2; // units per second
