@@ -1,12 +1,13 @@
 import { createCamera } from './components/camera';
 import { createLights } from './components/lights';
 import { createScene } from './components/scene';
-import { createAxesHelper } from './components/helpers/axesHelper';
+
 import { createRenderer } from './systems/renderer';
 import { Resizer } from './systems/Resizer';
 import { Loop } from './systems/Loop';
 import { ModelLoader } from './systems/GLTFloader';
 import { createMaterial } from './components/material';
+import { createFloor } from './components/floor';
 import * as THREE from 'three';
 
 //physics
@@ -25,9 +26,11 @@ export class World {
   private diceMesh: THREE.Object3D | null = null;
   private diceBody: any = null;
   private targetSize = 2; // Consistent size for both visual and physics
+  private floor;
 
   constructor(container: React.RefObject<HTMLCanvasElement>) {
     this.camera = createCamera();
+
     this.scene = createScene();
     this.container = container;
     //init renderer
@@ -49,8 +52,8 @@ export class World {
 
     // ADD AXES HELPER
     // const axesHelper = createAxesHelper();
-
-    this.scene.add(directionalLight, ambientLight);
+    this.floor = createFloor();
+    this.scene.add(directionalLight, ambientLight, this.floor);
 
     // Add physics update to the render loop
     this.loop.updatables.push({
@@ -162,6 +165,8 @@ export class World {
       // Copy position and rotation from physics body to visual mesh
       this.diceMesh.position.copy(this.diceBody.position);
       this.diceMesh.quaternion.copy(this.diceBody.quaternion);
+      //camera follows dice
+      // this.camera.lookAt(this.diceMesh.position);
     }
 
     // Update physics debug renderer
