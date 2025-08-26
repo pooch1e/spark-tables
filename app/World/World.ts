@@ -80,7 +80,7 @@ export class World {
     try {
       // Load dice model
       const loader = new ModelLoader();
-      const data = await loader.load('/models/4_sided_dice.glb');
+      const data = await loader.load('/models/dice_fixed.glb');
       const dice = loader.setupModel(data);
       const material = createMaterial();
 
@@ -103,9 +103,11 @@ export class World {
       dice.position.sub(center);
 
       // Rotate the dice to match physics orientation (adjust as needed)
-      dice.rotation.x = Math.PI /2; 
-      dice.rotation.y = Math.PI /4; 
-      dice.rotation.z = 0; 
+      // dice.rotation.x = Math.PI /2;
+      // dice.rotation.y = Math.PI /4;
+      // dice.rotation.z = 0;
+
+      dice.position.y = 1;
 
       diceGroup.add(dice);
 
