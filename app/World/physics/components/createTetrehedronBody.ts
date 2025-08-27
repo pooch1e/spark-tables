@@ -1,102 +1,41 @@
 import * as CANNON from 'cannon-es';
-import * as THREE from 'three';
-export const createTetrahedronFromGeometry = (
-  size: number = 2
-): CANNON.Body => {
-  console.log('Creating tetrahedron physics body with size:', size);
 
-  // Create Three.js tetrahedron geometry for reference
-  const geometry = new THREE.TetrahedronGeometry(size / 2, 0);
-
-  // Extract vertices from the geometry
-  const vertices: CANNON.Vec3[] = [];
-  const positions = geometry.attributes.position.array;
-
-  for (let i = 0; i < positions.length; i += 3) {
-    vertices.push(
-      new CANNON.Vec3(positions[i], positions[i + 1], positions[i + 2])
-    );
-  }
-
-  // Extract faces from geometry indices
-  const faces: number[][] = [];
-  if (geometry.index) {
-    const indices = geometry.index.array;
-    for (let i = 0; i < indices.length; i += 3) {
-      faces.push([indices[i], indices[i + 1], indices[i + 2]]);
-    }
-  } else {
-    // If no index, create faces from vertex order
-    for (let i = 0; i < vertices.length; i += 3) {
-      faces.push([i, i + 1, i + 2]);
-    }
-  }
-
-  console.log('Tetrahedron vertices:', vertices.length);
-  console.log('Tetrahedron faces:', faces.length);
-
-  try {
-    const shape = new CANNON.ConvexPolyhedron({ vertices, faces });
-
-    const body = new CANNON.Body({
-      mass: 5,
-      shape: shape,
-      position: new CANNON.Vec3(0, 10, 0),
-    });
-
-    console.log('Successfully created tetrahedron physics body');
-    return body;
-  } catch (error) {
-    console.error('Failed to create ConvexPolyhedron:', error);
-    return createSimpleTetrahedron(size);
-  }
-};
-
-export const createSimpleTetrahedron = (size: number): CANNON.Body => {
-  console.log('Creating simple manual tetrahedron');
-
-  // Simple tetrahedron vertices (regular tetrahedron inscribed in cube)
-  const s = size / 2;
+export const createTetrahedron = (size: number = 2): CANNON.Body => {
+  // Regular tetrahedron vertices (centered at origin)
+  const h = size * Math.sqrt(2 / 3);
   const vertices = [
-    new CANNON.Vec3(s, s, s),
-    new CANNON.Vec3(-s, -s, s),
-    new CANNON.Vec3(-s, s, -s),
-    new CANNON.Vec3(s, -s, -s),
+    new CANNON.Vec3(0, h / 2, 0), // top vertex (0)
+    new CANNON.Vec3(-size / 2, -h / 2, size / 2), // bottom front left (1)
+    new CANNON.Vec3(size / 2, -h / 2, size / 2), // bottom front right (2)
+    new CANNON.Vec3(0, -h / 2, -size / 2), // bottom back (3)
   ];
 
-  // Faces with correct winding
+  // Tetrahedron faces with correct counter-clockwise winding
+  // When viewed from outside the tetrahedron, vertices should be ordered CCW
   const faces = [
-    [0, 1, 2],
-    [0, 2, 3],
-    [0, 3, 1],
-    [1, 3, 2],
+    [0, 1, 2], // top face: top -> left -> right (CCW from outside)
+    [0, 3, 1], // left face: top -> back -> left (CCW from outside)
+    [0, 2, 3], // right face: top -> right -> back (CCW from outside)
+    [1, 3, 2], // bottom face: left -> back -> right (CCW from outside/below)
   ];
 
   try {
     const shape = new CANNON.ConvexPolyhedron({ vertices, faces });
-
     return new CANNON.Body({
       mass: 5,
-      shape: shape,
-      position: new CANNON.Vec3(0, 10, 0),
+      shape,
+      position: new CANNON.Vec3(0, 10, 0), 
     });
   } catch (error) {
-    console.error('Even simple tetrahedron failed, using box:', error);
-    return createBoxFallback(size);
+    console.warn('Failed to create tetrahedron, using box fallback:', error);
+    // Fallback to box shape
+    const boxShape = new CANNON.Box(
+      new CANNON.Vec3(size / 2, size / 2, size / 2)
+    );
+    return new CANNON.Body({
+      mass: 5,
+      shape: boxShape,
+      position: new CANNON.Vec3(0, 10, 0),
+    });
   }
-};
-
-// Final fallback: box shape
-export const createBoxFallback = (size: number): CANNON.Body => {
-  console.log('Using box fallback');
-
-  const boxShape = new CANNON.Box(
-    new CANNON.Vec3(size / 2, size / 2, size / 2)
-  );
-
-  return new CANNON.Body({
-    mass: 5,
-    shape: boxShape,
-    position: new CANNON.Vec3(0, 10, 0),
-  });
 };
