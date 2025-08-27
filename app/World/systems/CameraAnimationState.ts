@@ -15,11 +15,11 @@ export class DiceCameraController {
   private camera: THREE.Camera;
   private diceBody: CANNON.Body;
   private animationState: CameraAnimationState | null = null;
-  private velocityThreshold = 0.1; // Consider stopped when velocity is below this
-  private stillTime = 0; // How long the dice has been still
-  private requiredStillDuration = 1000; // Wait 1 second after stopping before animating
+  private velocityThreshold = 0.1; 
+  private stillTime = 0; 
+  private requiredStillDuration = 100; 
   private lastPosition = new THREE.Vector3();
-  private hasAnimated = false; // Prevent multiple animations
+  private hasAnimated = false; 
 
   // Callback functions
   public onAnimationStart?: () => void;
@@ -31,7 +31,7 @@ export class DiceCameraController {
     this.lastPosition.copy(diceBody.position);
   }
 
-  // Call this in your animation loop
+  
   update(deltaTime: number) {
     const currentTime = Date.now();
 
@@ -42,10 +42,10 @@ export class DiceCameraController {
 
     // Track how long dice has been still
     if (totalVelocity < this.velocityThreshold) {
-      this.stillTime += deltaTime * 1000; // Convert to milliseconds
+      this.stillTime += deltaTime * 1000; 
     } else {
       this.stillTime = 0;
-      this.hasAnimated = false; // Reset if dice starts moving again
+      this.hasAnimated = false; 
     }
 
     // Start animation if dice has been still long enough
@@ -74,8 +74,8 @@ export class DiceCameraController {
     const currentCameraPos = this.camera.position.clone();
 
     // Calculate where the camera is currently looking
-    // Since your camera.lookAt(diceMesh.position) in World, it's looking at the dice
-    const currentLookAt = dicePosition.clone(); // Camera is already looking at dice position
+
+    const currentLookAt = dicePosition.clone(); 
 
     // Target: closer to dice, looking down at it
     const offset = new THREE.Vector3(2, 3, 2); // Adjust these values for desired angle
@@ -89,7 +89,7 @@ export class DiceCameraController {
       startLookAt: currentLookAt,
       targetPosition: targetPosition,
       targetLookAt: targetLookAt,
-      duration: 2000, // 2 seconds
+      duration: 2000, 
     };
 
     this.hasAnimated = true;
@@ -146,82 +146,17 @@ export class DiceCameraController {
     return this.animationState !== null;
   }
 
-  // Optional: Reset for new dice throw
+  
   reset() {
     this.animationState = null;
     this.stillTime = 0;
     this.hasAnimated = false;
   }
 
-  // Optional: Manually trigger animation
+  
   triggerAnimation() {
     if (!this.animationState && !this.hasAnimated) {
       this.startCameraAnimation();
     }
   }
 }
-
-// Usage example in your main animation loop:
-/*
-const cameraController = new DiceCameraController(camera, diceBody);
-
-function animate() {
-  const deltaTime = clock.getDelta();
-  
-  // Update physics
-  physicsWorld.step(deltaTime);
-  
-  // Update camera animation
-  cameraController.update(deltaTime);
-  
-  // Render
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
-}
-*/
-
-// Alternative: Simple function-based approach
-export const createCameraAnimation = (
-  camera: THREE.Camera,
-  diceBody: CANNON.Body,
-  duration: number = 2000
-) => {
-  return new Promise<void>((resolve) => {
-    const startTime = Date.now();
-    const startPosition = camera.position.clone();
-    const startLookAt = new THREE.Vector3(0, 0, 0); // Adjust based on current target
-
-    const dicePosition = new THREE.Vector3(
-      diceBody.position.x,
-      diceBody.position.y,
-      diceBody.position.z
-    );
-
-    const targetPosition = dicePosition.clone().add(new THREE.Vector3(2, 3, 2));
-    const targetLookAt = dicePosition.clone();
-
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Smooth easing
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-
-      const newPosition = startPosition
-        .clone()
-        .lerp(targetPosition, easedProgress);
-      const newLookAt = startLookAt.clone().lerp(targetLookAt, easedProgress);
-
-      camera.position.copy(newPosition);
-      camera.lookAt(newLookAt);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        resolve();
-      }
-    };
-
-    animate();
-  });
-};
