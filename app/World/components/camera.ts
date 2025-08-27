@@ -1,5 +1,5 @@
-import { PerspectiveCamera, MathUtils } from 'three';
-const radiansPerSecond = MathUtils.degToRad(30);
+import { PerspectiveCamera } from 'three';
+
 export const createCamera = () => {
   const camera = new PerspectiveCamera(
     70, // fov = Field Of View
@@ -9,20 +9,9 @@ export const createCamera = () => {
   );
 
   // move the camera back so we can view the scene
-  camera.position.set(0, 0, 13);
+  camera.position.set(0, 0, 10);
 
-  // animate camera position on tick
-  // const speed = 2; // units per second
-  // const maxZ = 50;
-  // const minZ = 5;
-
-  camera.tick = (delta) => {
-    // camera.position.z += speed * delta;
-    // if (camera.position.z > maxZ) {
-    //   camera.position.z = minZ;
-    // }
-    //camera to follow object
-  };
+  camera.tick = (delta) => {};
 
   return camera;
 };

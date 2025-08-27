@@ -13,6 +13,9 @@ import * as THREE from 'three';
 //physics
 import { PhysicsWorld } from './physics/PhysicsWorld';
 
+// Import the camera animation system
+import { DiceCameraController } from './systems/CameraAnimationState';
+
 export class World {
   private camera;
   private scene;
@@ -28,8 +31,16 @@ export class World {
   private targetSize = 2; // Consistent size for both visual and physics
   private floor;
 
+  // Camera animation
+  private cameraController: DiceCameraController | null = null;
+  private originalCameraPosition: THREE.Vector3;
+  private isFollowingDice = true; // Track if camera should follow dice
+
   constructor(container: React.RefObject<HTMLCanvasElement>) {
     this.camera = createCamera();
+
+    // Store original camera position for potential reset
+    this.originalCameraPosition = this.camera.position.clone();
 
     this.scene = createScene();
     this.container = container;
@@ -57,7 +68,7 @@ export class World {
 
     // Add physics update to the render loop
     this.loop.updatables.push({
-      tick: () => this.updatePhysics(),
+      tick: (delta: number) => this.updatePhysics(delta),
     });
   }
 
@@ -75,6 +86,25 @@ export class World {
 
     // Load and setup the visual mesh
     await this.loadAndSetupVisualDice();
+
+    // Initialize camera controller after dice body is available
+    if (this.diceBody) {
+      this.cameraController = new DiceCameraController(
+        this.camera,
+        this.diceBody
+      );
+
+      // Optional: Listen for animation events
+      this.cameraController.onAnimationStart = () => {
+        console.log('Camera zoom animation started');
+        this.isFollowingDice = false; // Stop following dice during animation
+      };
+
+      this.cameraController.onAnimationComplete = () => {
+        console.log('Camera zoom animation completed');
+        // Keep camera in zoomed position, don't resume following
+      };
+    }
 
     this.physics.start();
   }
@@ -111,8 +141,6 @@ export class World {
       const maxDimension = Math.max(size.x, size.y, size.z);
       const scale = this.targetSize / maxDimension;
       diceGroup.scale.setScalar(scale);
-
-      console.log('Visual dice scale:', scale, 'Target size:', this.targetSize);
 
       // Sync initial position and rotation with physics body
       if (this.diceBody) {
@@ -151,19 +179,27 @@ export class World {
 
     this.diceMesh = mesh;
     this.scene.add(mesh);
-    console.log('Created visual fallback tetrahedron');
+
     // turn off debugger
     this.physics.cannonDebugger.showDebugWireframes(); //this not working
   }
 
   // Update method to sync visual dice with physics
-  private updatePhysics() {
+  private updatePhysics(deltaTime?: number) {
     if (this.diceBody && this.diceMesh) {
       // Copy position and rotation from physics body to visual mesh
       this.diceMesh.position.copy(this.diceBody.position);
       this.diceMesh.quaternion.copy(this.diceBody.quaternion);
-      //camera follows dice
-      this.camera.lookAt(this.diceMesh.position);
+
+      // Only make camera follow dice if not in animation mode
+      if (this.isFollowingDice && !this.cameraController?.isAnimating()) {
+        this.camera.lookAt(this.diceMesh.position);
+      }
+    }
+
+    // Update camera animation controller
+    if (this.cameraController && deltaTime) {
+      this.cameraController.update(deltaTime);
     }
 
     // Update physics debug renderer
@@ -177,23 +213,47 @@ export class World {
   // Method to roll the dice again
   rollDice() {
     if (this.diceBody) {
-      // Reset position above ground
-      this.diceBody.position.set(
-        Math.random() * 4 - 2, // Random x position
-        10,
-        Math.random() * 4 - 2 // Random z position
-      );
+      // Reset camera animation state for new roll
+      if (this.cameraController) {
+        this.cameraController.reset();
+      }
 
-      // Reset velocity
-      this.diceBody.velocity.set(0, 0, 0);
-      this.diceBody.angularVelocity.set(0, 0, 0);
+      // Reset camera following
+      this.isFollowingDice = true;
 
-      // Add random angular velocity for spinning
-      this.diceBody.angularVelocity.set(
-        Math.random() * 10 - 5,
-        Math.random() * 10 - 5,
-        Math.random() * 10 - 5
-      );
+      // Optionally reset camera to original position
+      // this.resetCamera();
+
+      this.diceBody.rollDice();
+    }
+  }
+
+  // Reset camera to original position
+  resetCamera() {
+    this.camera.position.copy(this.originalCameraPosition);
+    this.camera.lookAt(0, 0, 0); // or wherever you want it to look
+    this.isFollowingDice = true;
+
+    if (this.cameraController) {
+      this.cameraController.reset();
+    }
+  }
+
+  // Manually trigger camera animation (if you want a button for it)
+  triggerCameraZoom() {
+    if (this.cameraController) {
+      this.cameraController.triggerAnimation();
+    }
+  }
+
+  // Toggle between following dice and free camera
+  toggleCameraFollow() {
+    this.isFollowingDice = !this.isFollowingDice;
+
+    if (this.cameraController) {
+      if (!this.isFollowingDice) {
+        this.cameraController.reset();
+      }
     }
   }
 
@@ -245,5 +305,14 @@ export class World {
 
   getTargetSize() {
     return this.targetSize;
+  }
+
+  getCameraController() {
+    return this.cameraController;
+  }
+
+  // Check if camera is currently animating
+  isCameraAnimating() {
+    return this.cameraController?.isAnimating() || false;
   }
 }

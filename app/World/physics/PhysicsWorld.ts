@@ -11,6 +11,7 @@ export class PhysicsWorld {
   public cannonDebugger: any;
   private debugEnabled = true;
   private readonly diceSize = 2;
+  private diceBody;
 
   constructor(scene: THREE.Scene) {
     this.world = new CANNON.World();
@@ -45,33 +46,33 @@ export class PhysicsWorld {
   }
 
   private addDice() {
-    const diceBody = createTetrahedron(this.diceSize);
+    this.diceBody = createTetrahedron(this.diceSize);
 
     // Set material properties
-    diceBody.material = new CANNON.Material('dice');
-    diceBody.material.friction = 0.4;
-    diceBody.material.restitution = 0.3;
+    this.diceBody.material = new CANNON.Material('dice');
+    this.diceBody.material.friction = 0.4;
+    this.diceBody.material.restitution = 0.3;
 
     // Add random initial conditions
-    diceBody.quaternion.setFromEuler(
+    this.diceBody.quaternion.setFromEuler(
       Math.random() * Math.PI,
       Math.random() * Math.PI,
       Math.random() * Math.PI
     );
 
-    diceBody.velocity.set(
+    this.diceBody.velocity.set(
       (Math.random() - 0.5) * 5,
       8,
       (Math.random() - 0.5) * 5
     );
 
-    diceBody.angularVelocity.set(
+    this.diceBody.angularVelocity.set(
       (Math.random() - 0.5) * 10,
       (Math.random() - 0.5) * 10,
       (Math.random() - 0.5) * 10
     );
 
-    this.world.addBody(diceBody);
+    this.world.addBody(this.diceBody);
     console.log('Added dice to physics world');
   }
 
@@ -100,6 +101,26 @@ export class PhysicsWorld {
 
   toggleDebugRenderer() {
     this.debugEnabled = !this.debugEnabled;
+  }
+
+  rollDice() {
+    // Reset position above ground
+    this.diceBody.position.set(
+      Math.random() * 4 - 2, // Random x position
+      10,
+      Math.random() * 4 - 2 // Random z position
+    );
+
+    // Reset velocity
+    this.diceBody.velocity.set(0, 0, 0);
+    this.diceBody.angularVelocity.set(0, 0, 0);
+
+    // Add random angular velocity for spinning
+    this.diceBody.angularVelocity.set(
+      Math.random() * 10 - 5,
+      Math.random() * 10 - 5,
+      Math.random() * 10 - 5
+    );
   }
 
   getWorld(): CANNON.World {
