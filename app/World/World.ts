@@ -1,6 +1,7 @@
 import { createCamera } from './components/camera';
 import { createLights } from './components/lights';
 import { createScene } from './components/scene';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 import { createRenderer } from './systems/renderer';
 import { Resizer } from './systems/Resizer';
@@ -43,7 +44,13 @@ export class World {
     this.originalCameraPosition = this.camera.position.clone();
 
     this.scene = createScene();
+
     this.container = container;
+    const orbitControls = new OrbitControls(
+      this.camera,
+      this.container.current
+    );
+    this.scene.add(orbitControls)
     //init renderer
     this.renderer = createRenderer(this.container.current || undefined);
     //init physics world
