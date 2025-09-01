@@ -6,7 +6,7 @@ export const createFloor = () => {
   const floor = new Mesh(geometry, material);
 
   floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -10;
+  floor.position.y = -5.3;
   floor.receiveShadow = true;
 
   return floor;
