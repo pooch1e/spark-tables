@@ -1,5 +1,5 @@
 import RandomNumberButton from './components/RandomNumberButton';
-import TopicsTable from './components/topics/FetchTopics';
+import TopicsTable from './components/features/topics/FetchTopics';
 import { ThreeCanvas } from './World/ThreeCanvas';
 
 export default function Home() {

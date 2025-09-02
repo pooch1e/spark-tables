@@ -50,7 +50,7 @@ export class World {
       this.camera,
       this.container.current
     );
-    this.scene.add(orbitControls)
+    
     //init renderer
     this.renderer = createRenderer(this.container.current || undefined);
     //init physics world
@@ -69,7 +69,7 @@ export class World {
     }
 
     // ADD AXES HELPER
-    // const axesHelper = createAxesHelper();
+
     this.floor = createFloor();
     this.scene.add(directionalLight, ambientLight, this.floor);
 
