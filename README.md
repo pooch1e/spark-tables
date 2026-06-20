@@ -313,7 +313,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - add error handling and edge cases to endpoint testing eg if no topic exists on id return better messaging to user
 - add error handling for themes with no topic id
 - add endpoint.json to track all endpoints, serve up on /api
-
+- add table management- material UI 
 3d
 - add threejs support service
 - add models for dice roll to choose table
