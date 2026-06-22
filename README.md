@@ -317,7 +317,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 3d
 - add threejs support service
 - add models for dice roll to choose table
-
+- redesign backend and threejs feature 
 
 # Intergration testing with
 
