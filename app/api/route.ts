@@ -1,7 +1,7 @@
 import { Endpoints } from '../lib/services/endpointsService';
 
 //endpoint.json
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const endpoints = await Endpoints.getAllEndpoints();
     return Response.json({ success: true, data: endpoints });

@@ -22,7 +22,7 @@ export default defineConfig({
   schema: './db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    connectionString,
+    url: connectionString,
   },
   verbose: true,
   strict: true,

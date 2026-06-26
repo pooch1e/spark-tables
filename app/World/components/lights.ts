@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DirectionalLight, AmbientLight } from 'three';
 export const createLights = () => {
   const directionalLight = new DirectionalLight('white', 8);

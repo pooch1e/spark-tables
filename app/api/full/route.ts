@@ -1,6 +1,6 @@
 import { TopicService } from '@/app/lib/services/topicService';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const allData = await TopicService.getAllTopicsData();
     return Response.json(

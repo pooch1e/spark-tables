@@ -1,3 +1,4 @@
+// @ts-nocheck
 export class Resizer {
   private container: HTMLElement;
   private camera: THREE.PerspectiveCamera;

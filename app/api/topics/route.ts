@@ -1,12 +1,10 @@
 //get topics
 import {
-  NotFoundError,
   ValidationError,
-  DatabaseError,
   ConflictError,
 } from '@/app/lib/services/errorHandling';
 import { TopicService } from '@/app/lib/services/topicService';
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const allTopics = await TopicService.getAllTopics();
 

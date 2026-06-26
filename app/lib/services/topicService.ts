@@ -1,10 +1,9 @@
 import { db } from '@/db/connections';
 import { topics, themes, subthemes, descriptors } from '@/db/schema';
-import { eq, and, ne } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { nestTopicData } from '../utils/nestTopicData';
 import {
   NotFoundError,
-  ValidationError,
   DatabaseError,
   ConflictError,
 } from './errorHandling.ts';
@@ -81,9 +80,9 @@ export class TopicService {
     }
   }
 
-  static async postTopic({ body }) {
+  static async postTopic({ body }: { body: { name: string; description?: string } }) {
     try {
-      const { name, description } = body;
+      const { name } = body;
       const existingTopic = await db
         .select()
         .from(topics)

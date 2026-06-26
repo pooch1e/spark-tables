@@ -17,7 +17,7 @@ export class ThemeService {
     }
   }
 
-  static async postTheme({ body }) {
+  static async postTheme({ body }: { body: { name: string } }) {
     try {
       const { name } = body;
       const existingTheme = await db
@@ -29,7 +29,7 @@ export class ThemeService {
         throw new ConflictError('Theme name already exists');
       }
 
-      const newTheme = await db.insert(themes).values(body).returning();
+      const newTheme = await db.insert(themes).values(body as typeof themes.$inferInsert).returning();
       const theme = newTheme[0];
       return theme;
     } catch (err) {

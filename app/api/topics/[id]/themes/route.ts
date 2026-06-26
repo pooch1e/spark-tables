@@ -3,10 +3,10 @@ import { ThemeService } from '@/app/lib/services/themeService';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId: string = await params.id;
+    const { id: topicId } = await params;
     const numericId: number = Number(topicId);
 
     const themesByTopicId = await ThemeService.getThemesByTopicId(numericId);

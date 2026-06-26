@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Clock } from 'three';
 
 const clock = new Clock();

@@ -7,6 +7,11 @@ export const seed = async ({
   themeTestData,
   subthemeData,
   descriptorData,
+}: {
+  topicsTestData: (typeof topics.$inferInsert)[];
+  themeTestData: (typeof themes.$inferInsert)[];
+  subthemeData: (typeof subthemes.$inferInsert)[];
+  descriptorData: (typeof descriptors.$inferInsert)[];
 }): Promise<void> => {
   try {
     //delete data before seeding

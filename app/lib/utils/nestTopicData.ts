@@ -24,7 +24,14 @@ type Topic = {
   themes: Theme[];
 };
 
-export function nestTopicData(rows: any[]): Topic[] {
+type RawRow = {
+  topics: { id: number; name: string; description: string | null };
+  themes: { id: number; name: string; order: number; topic_id: number } | null;
+  subthemes: { id: number; name: string; order: number; theme_id: number } | null;
+  descriptors: { id: number; text: string; subtheme_id: number } | null;
+};
+
+export function nestTopicData(rows: RawRow[]): Topic[] {
   const topicsMap = new Map<number, Topic>();
 
   for (const row of rows) {

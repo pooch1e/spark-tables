@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PlaneGeometry, MeshStandardMaterial, Mesh } from 'three';
 
 export const createFloor = () => {

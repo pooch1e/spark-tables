@@ -1,12 +1,11 @@
 //get themes
 import { ThemeService } from '@/app/lib/services/themeService';
 import {
-  NotFoundError,
   ValidationError,
   DatabaseError,
   ConflictError,
 } from '@/app/lib/services/errorHandling';
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const allThemes = await ThemeService.getAllThemes();
 

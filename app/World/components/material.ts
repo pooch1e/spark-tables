@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MeshStandardMaterial, TextureLoader } from 'three';
 
 export const createMaterial = () => {

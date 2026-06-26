@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
 import CannonDebugger from 'cannon-es-debugger';

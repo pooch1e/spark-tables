@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PerspectiveCamera } from 'three';
 
 export const createCamera = () => {

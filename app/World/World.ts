@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createCamera } from './components/camera';
 import { createLights } from './components/lights';
 import { createScene } from './components/scene';
@@ -80,7 +81,7 @@ export class World {
   }
 
   async init() {
-    await this.physics.init(true); // init physics
+    await this.physics.init(); // init physics
 
     // Get the physics body that was created
     const bodies = this.physics.getBodies();

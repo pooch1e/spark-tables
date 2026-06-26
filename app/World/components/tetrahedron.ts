@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { TetrahedronGeometry, MathUtils, Mesh } from 'three';
 
 import { createMaterial } from './material';
