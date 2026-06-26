@@ -1,15 +1,15 @@
 import SparkTableCol from './SparkTableCol';
-import type { Subthemes } from '@/app/types';
+import type { FullTree } from '@/app/types';
 
-export default function SparkTableSubthemeHeader({ subtheme }: Subthemes) {
+type SubthemeWithDescriptors = FullTree['themes'][number]['subthemes'][number];
 
-
+export default function SparkTableSubthemeHeader({ subtheme }: { subtheme: SubthemeWithDescriptors }) {
   return (
-    <>
-      <div className="col">
-        <p className="font-semibold bg-gray-600 text-white p-2 text-center">{subtheme.name}</p>
-        <SparkTableCol descriptors={subtheme.descriptors} />
-      </div>
-    </>
+    <div className="border-r last:border-r-0 border-forge-border">
+      <p className="font-[family-name:var(--font-electrolize)] text-xs text-forge-muted uppercase tracking-widest bg-forge-elevated p-2 text-center border-b border-forge-border">
+        {subtheme.name}
+      </p>
+      <SparkTableCol descriptors={subtheme.descriptors} />
+    </div>
   );
 }

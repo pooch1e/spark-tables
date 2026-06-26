@@ -1,15 +1,14 @@
-'use client';
-//title of theme
-export default function SparkTableHeader({ themeName, themeDescription }) {
-  // console.log(themeName);
+export default function SparkTableHeader({ themeName, themeDescription }: { themeName: string; themeDescription: string | null }) {
   return (
-    <div>
-      <div className="mb-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-        <h3>{themeName}</h3>
-      </div>
-      <div className="mb-6 text-lg font-normal text-center text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-        <h4>{themeDescription}</h4>
-      </div>
+    <div className="py-10 px-4 text-center border-b border-forge-border">
+      <h1 className="font-[family-name:var(--font-cinzel)] text-4xl md:text-6xl uppercase tracking-widest text-forge-text mb-3">
+        {themeName}
+      </h1>
+      {themeDescription && (
+        <p className="font-mono text-forge-muted text-sm max-w-xl mx-auto leading-relaxed">
+          {themeDescription}
+        </p>
+      )}
     </div>
   );
 }

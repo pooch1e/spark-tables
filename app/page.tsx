@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import RandomNumberButton from './components/RandomNumberButton';
 import TopicsTable from './components/features/topics/FetchTopics';
 import { ThreeCanvas } from './World/ThreeCanvas';

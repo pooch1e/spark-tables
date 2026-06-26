@@ -1,17 +1,15 @@
 import { randomNumGenerator } from '@/app/lib/utils/randomNumGenerator';
-export default function SparkTableRoll({ onRoll }) {
-  const handleButtonClick = () => {
-    const tableRoll: number = randomNumGenerator(9);
 
-    console.log(tableRoll);
-    onRoll(tableRoll);
+export default function SparkTableRoll({ onRoll }: { onRoll: (n: number) => void }) {
+  const handleButtonClick = () => {
+    onRoll(randomNumGenerator(9));
   };
   return (
-    <div className="p-2 justify-center">
+    <div className="flex justify-center py-8">
       <button
-        className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-        onClick={handleButtonClick}>
-        Roll On Table
+        onClick={handleButtonClick}
+        className="font-[family-name:var(--font-cinzel)] text-forge-gold border border-forge-gold px-10 py-3 text-sm uppercase tracking-widest hover:bg-forge-gold hover:text-forge-base transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-forge-gold focus:ring-offset-1 focus:ring-offset-forge-base">
+        Cast the Table
       </button>
     </div>
   );

@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --background: #0D0F14;
+  --foreground: #E8E6E1;
 }
 
 @theme inline {
@@ -10,23 +11,32 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-forge-base: #0D0F14;
+  --color-forge-surface: #161A23;
+  --color-forge-elevated: #1E2430;
+  --color-forge-border: #262B38;
+  --color-forge-gold: #C8A96A;
+  --color-forge-text: #E8E6E1;
+  --color-forge-muted: #7A8194;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans);
 }
 
-@layer {
-  .highlight {
-    @apply text-blue-500 border-2 border-blue-400 p-2 rounded-md bg-blue-50;
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.revelation-panel {
+  animation: reveal-in 0.25s ease-out;
 }
